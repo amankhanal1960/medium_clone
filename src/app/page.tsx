@@ -1,7 +1,9 @@
-import React from "react";
+import HeroSection from "@/components/HeroSection";
 
-const Page = () => {
-  return <div></div>;
-};
-
-export default Page;
+export default function HomePage() {
+  return (
+    <section className="relative">
+      <HeroSection />
+    </section>
+  );
+}

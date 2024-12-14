@@ -2,8 +2,9 @@ import React from "react";
 import { inter } from "@/app/font";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import "./globals.css";
 import HeroSection from "@/components/HeroSection";
+import "./globals.css";
+
 export default function RootLayout({
   children,
 }: {
@@ -14,12 +15,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-1 ">
-            {children}
-            <section>
-              <HeroSection />
-            </section>
-          </main>
+          <main className="flex-1 relative">{children}</main>
           <Footer />
         </div>
       </body>
