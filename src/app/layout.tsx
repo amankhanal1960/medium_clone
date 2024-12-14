@@ -14,7 +14,7 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <div className="flex flex-col min-h-screen">
           <Header />
-          <main className="flex-grow">
+          <main className="flex-1 ">
             {children}
             <section>
               <HeroSection />

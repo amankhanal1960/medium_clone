@@ -16,3 +16,10 @@ export const footerLinks = [
   { label: "Text to Speech", href: "/text-to-speech" },
   { label: "Teams", href: "/teams" },
 ];
+
+export const smallScreenLinks = [
+  { href: "/about", label: "About" },
+  { href: "/help", label: "Help" },
+  { href: "/terms", label: "Terms" },
+  { href: "/privacy", label: "Privacy" },
+];
