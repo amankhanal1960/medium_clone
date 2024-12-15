@@ -3,12 +3,18 @@ import React from "react";
 import { navLinks } from "@/app/constants/index";
 import { Button } from "./ui/Button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    router.push("/login");
+  };
   return (
     <header className=" z-10 w-full fixed bg-customBackground">
       <nav className="flex flex-1 items-center justify-between gap-8 py-5 px-2 sm:px-12 md:px-16 lg:px-28 xl:px-44">
-        <h1 className="text-2xl font-extrabold text-gray-950">Medium</h1>
+        <h1 className="text-3xl font-extrabold text-gray-950">Medium</h1>
         <div className="flex items-center gap-6 ">
           <ul className="flex items-center gap-6">
             {navLinks.map((item) => (
@@ -22,7 +28,12 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          {/* <p className="text-gray-950 font-medium text-sm" onClick={}>Sign in</p> */}
+          <p
+            className="text-gray-950 font-medium hidden sm:flex cursor-pointer text-sm"
+            onClick={handleLogin}
+          >
+            Sign in
+          </p>
 
           <Button label="Button" aria-label="Click this button" />
         </div>

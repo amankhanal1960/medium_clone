@@ -1,19 +1,30 @@
-import React from "react";
+"use client";
+// import React from "react";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
+
+  const handleClose = () => {
+    router.push("/");
+  };
   return (
     <div>
       <div className="flex items-center justify-center h-screen bg-gray-50 overflow-hidden relative">
         {/* Background overlay */}
-        <div className="absolute inset-0 bg-gray-50 opacity-80 z-10"></div>
+        <div
+          className="absolute inset-0 bg-gray-50 opacity-80 z-10"
+          onClick={handleClose}
+        ></div>
 
         {/* Login form */}
         <div className="bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative z-20">
           <div className="relative">
             <img
-              src="/assects/close.png"
+              src="/assects/x.svg"
               alt="Close button"
               className="absolute top-0 right-0 w-6 h-6 cursor-pointer z-30 md:-translate-y-6 md:translate-x-6 -translate-y-9 -translate-x-3"
+              onClick={handleClose}
             />
           </div>
           <h2 className="text-[26px] font-normal text-black mt-[14px] mb-20 text-center">
@@ -70,13 +81,10 @@ const LoginPage = () => {
             </button>
           </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-800">
+          <div className="mt-10 text-center">
+            <p className="text-sm font-semibold text-gray-800">
               No account?&nbsp;
-              <a
-                href="#"
-                className="text-green-800 hover:underline font-semibold"
-              >
+              <a href="#" className="text-green-800  font-bold">
                 Create one
               </a>
             </p>
