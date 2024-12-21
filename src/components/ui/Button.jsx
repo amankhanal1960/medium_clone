@@ -12,7 +12,6 @@ export const Button = () => {
       className="flex justify-center items-center gap-2 px-[16px] py-[8px] font-normal text-sm bg-black text-white rounded-full"
       onClick={handleLogin}
     >
-      {" "}
       Get Started
     </button>
   );

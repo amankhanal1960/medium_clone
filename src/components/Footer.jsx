@@ -1,6 +1,6 @@
 // components/Footer.tsx
 import React from "react";
-import { footerLinks, smallScreenLinks } from "@/app/constants";
+import { footerLinks, smallScreenLinks } from "@/constants";
 
 const Footer = () => {
   return (

@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+// import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -16,9 +18,11 @@ const HeroSection = () => {
           <p className="text-[22px] font-medium">
             A place to read, write and deepen your understanding.
           </p>
-          <button className="flex justify-center text-xl items-center gap-2 py-2 w-[196px] text-white rounded-full bg-green-700 lg:bg-black mt-12">
-            Start Reading
-          </button>
+          <Link href={"/register?type=write"}>
+            <button className="flex justify-center text-xl items-center gap-2 py-2 w-[196px] text-white rounded-full bg-green-700 lg:bg-black mt-12">
+              Start Reading
+            </button>
+          </Link>
         </div>
 
         <div className="h-full relative z-0 hidden lg:block">
@@ -27,6 +31,7 @@ const HeroSection = () => {
             alt="Placeholder Image"
             width={600}
             height={600}
+            priority
             className="w-full h-full mt-[50px] max-h-[600px] object-cover"
           />
         </div>
@@ -34,5 +39,4 @@ const HeroSection = () => {
     </div>
   );
 };
-
 export default HeroSection;

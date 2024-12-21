@@ -19,7 +19,7 @@ body {
   background: var(--background);
   font-family: "playfair Display", serif;
 }
-.fade-in {
+/* .fade-in {
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -30,4 +30,4 @@ body {
   to {
     opacity: 1;
   }
-}
+} */
