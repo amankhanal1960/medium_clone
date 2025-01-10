@@ -1,121 +1,51 @@
-// "use client";
-// import React, { useState } from "react";
-// import "@fortawesome/fontawesome-free/css/all.min.css";
-// import Image from "next/image";
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
-
-// export const PopUp = () => (
-//   <div className="fixed top-14 right-0 bg-white shadow-lg border border-gray-200 rounded-md p-4 w-72">
-//     <div>
-//       <ul className="flex flex-col items-start justify-center gap-6">
-//         <Link
-//           href={"/username"}
-//           className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
-//         >
-//           <i className="fa-regular fa-user"></i>
-//           Profile
-//         </Link>
-//         <Link
-//           href={"/"}
-//           className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
-//         >
-//           <i className="fa-regular fa-bookmark"></i>
-//           Library
-//         </Link>
-//         <Link
-//           href={"/"}
-//           className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
-//         >
-//           <i className="fa-regular fa-file-lines"></i>
-//           Stories
-//         </Link>
-//         <Link
-//           href={"/"}
-//           className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
-//         >
-//           <i className="fa-solid fa-chart-simple"></i>
-//           Stats
-//         </Link>
-//       </ul>
-//     </div>
-//   </div>
-// );
-
-// const Blog = () => {
-//   const router = useRouter();
-
-//   const handleLogin = () => {
-//     router.push("/");
-//   };
-
-//   const [isPopupVisible, setIsPopupVisible] = useState(false);
-
-//   const togglePopup = () => {
-//     setIsPopupVisible(!isPopupVisible);
-//   };
-//   return (
-//     <>
-//       <div>
-//         <div className="px-6 py-2 flex items-center justify-between bg-white">
-//           <div className="flex items-center gap-4">
-//             <h1
-//               className="font-bold text-black text-[30px] cursor-pointer"
-//               onClick={handleLogin}
-//             >
-//               Medium
-//             </h1>
-//             <div className=" rounded-3xl sm:bg-gray-100 flex gap-4 items-center px-3 py-3">
-//               <i className="fa-solid fa-magnifying-glass fa-lg pl-2 text-gray-300"></i>
-//               <input
-//                 type="text"
-//                 placeholder="Search"
-//                 className="bg-gray-100 text-black text-sm  outline-none sm:flex hidden"
-//               />
-//             </div>
-//           </div>
-//           <div className="flex gap-10 items-center">
-//             <div className="sm:flex gap-3 items-center cursor-pointer hidden">
-//               <i className="fa-regular fa-pen-to-square fa-lg text-gray-400 hover:text-gray-900"></i>
-//               <p className="font-normal text-gray-600 text-base  hover:text-gray-900">
-//                 Write
-//               </p>
-//             </div>
-//             <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer  hover:text-gray-900"></i>
-//             <Image
-//               src="/assects/me1.jpg"
-//               alt="Placeholder Image"
-//               width={600}
-//               height={600}
-//               priority
-//               className="w-8 h-8 rounded-full border-gray-300 cursor-pointer  hover:opacity-55 transition"
-//               onClick={togglePopup}
-//             />
-//           </div>
-//         </div>
-//         <hr className="border-t border-gray-200" />
-
-//         {isPopupVisible && <PopUp />}
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Blog;
-
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Navbar from "@/components/navbar";
+import Link from "next/link";
+import { recommendations } from "@/constants";
 
 const Blog = () => {
+  const [activeLink, setActiveLink] = useState("");
+
   return (
     <div>
       <Navbar />
       <div className="flex h-screen">
         {/* left section */}
-        <div className="bg-white w-3/5"></div>
-        <div className="border-l border-gray-300 h-full"></div>
+
+        <div className="bg-white w-[65%]">
+          <div>
+            <div className="text-gray-500 py-8 items-center justify-center ml-10">
+              <div className="flex flex-col items-center">
+                <ul className=" flex gap-6 text-sm font-semibold">
+                  {recommendations.map((item, index) => (
+                    <li key={index}>
+                      <Link className="hover:text-gray-900 " href={item.href}>
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <hr className="border-t border-gray-200 mt-4 mx-36" />
+            </div>
+
+            <div className="flex mt-4 mx-36 text-black">
+              <div className="flex flex-col">
+                <p> In Prototype by Melody Koh</p>
+                <h2>The UX job Market REALLY sucks right now</h2>
+                <h4>Why you should pivot and change directions right NOW</h4>
+                <div></div>
+              </div>
+              <div className="h-22 w-28">
+                <img src="https://miro.medium.com/v2/resize:fit:828/format:webp/0*vkzsR4xPNb63GYdn"></img>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="border-l border-gray-200 h-full"></div>
         {/* right section */}
-        <div className="bg-white w-2/5">
+        <div className="bg-white w-[35%]">
           <div className="h-full text-black">
             <div className="p-4">
               <h2 className="text-xl font-semibold">Membership Content</h2>

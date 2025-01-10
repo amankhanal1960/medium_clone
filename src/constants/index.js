@@ -23,3 +23,14 @@ export const smallScreenLinks = [
   { href: "/terms", label: "Terms" },
   { href: "/privacy", label: "Privacy" },
 ];
+
+export const recommendations = [
+  { href: "/foryou", label: "For you" },
+  { href: "/", label: "Following" },
+  { href: "/", label: "Sexuality" },
+  { href: "/", label: "Women" },
+  { href: "/", label: "Apple" },
+  { href: "/", label: "Marketing" },
+  { href: "/", label: "Programming" },
+  { href: "/", label: "Health" },
+];
