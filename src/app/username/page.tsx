@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import Blog from "../membership/page";
+
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/navbar";
 
 const Profile = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -55,7 +56,7 @@ const Profile = () => {
   return (
     <div className="bg-white min-h-screen flex flex-col">
       <div>
-        <Blog />
+        <Navbar />
       </div>
       <div className="flex px-6 lg:flex-row flex-col xl:ml-44 lg:ml-28 flex-grow">
         {/* Left Section */}
