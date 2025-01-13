@@ -60,7 +60,7 @@ const Blog = () => {
               </div>
               <div>
                 <Image
-                  src="/assects/me1.jpg"
+                  src="/assects/background.png"
                   alt="Placeholder Image"
                   width={600}
                   height={600}
