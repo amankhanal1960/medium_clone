@@ -1,15 +1,23 @@
 import { NextResponse } from "next/server";
-import blog from "../../../../lib/modals/blog";
 import connect from "../../../../lib/db";
-export const GET = async () => {
+import Blog from "../../../../lib/modals/blog";
+
+// Fetch all blog posts
+export async function GET() {
   try {
     await connect();
-    const Blog = await blog.find();
-    return new NextResponse(JSON.stringify(Blog), { status: 200 });
+
+    const blogs = await Blog.find({});
+
+    return NextResponse.json({ blogs }, { status: 200 });
   } catch (error: any) {
     console.error(error);
-    return new NextResponse("Error fetching data" + error.message, {
-      status: 500,
-    });
+
+    return NextResponse.json(
+      { message: "Error fetching the data ", error: error.message },
+      {
+        status: 500,
+      }
+    );
   }
-};
+}

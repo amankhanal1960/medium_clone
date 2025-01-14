@@ -30,46 +30,91 @@ const Blog = () => {
               <hr className="border-t border-gray-200 mt-4" />
             </div>
 
-            <div className="flex mt-4 text-black justify-between items-center ">
-              <div className="flex flex-col gap-4">
-                <p className="text-sm text-gray-600">Melody Koh</p>
-                <h1 className="text-xl font-extrabold text-black ">
-                  The UX job Market REALLY sucks right now
-                </h1>
-                <h4 className="text-base font-medium text-gray-400">
-                  Why you should pivot and change directions right NOW
-                </h4>
-                <div className="flex text-gray-500 justify-between py-3 ">
-                  <div className=" flex gap-4 ">
-                    <p>Aug 22, 2024</p>
-                    <div className="flex items-center gap-1.5">
-                      <i className="fa-solid fa-hands-clapping"></i>
-                      <p>5.5K</p>
+            <div>
+              <div className="flex mt-4 text-black justify-between items-center ">
+                <div className="flex flex-col gap-4">
+                  <p className="text-sm text-gray-600">Melody Koh</p>
+                  <h1 className="text-xl font-extrabold text-black ">
+                    The UX job Market REALLY sucks right now
+                  </h1>
+                  <h4 className="text-base font-medium text-gray-400">
+                    Why you should pivot and change directions right NOW
+                  </h4>
+                  <div className="flex text-gray-500 justify-between py-3 ">
+                    <div className=" flex gap-4 ">
+                      <p>Aug 22, 2024</p>
+                      <div className="flex items-center gap-1.5">
+                        <i className="fa-solid fa-hands-clapping"></i>
+                        <p>5.5K</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 justify-center">
+                        <i className="fa-solid fa-comment"></i>
+                        <p>39</p>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 justify-center">
-                      <i className="fa-solid fa-comment"></i>
-                      <p>39</p>
+                    <div className="flex gap-6">
+                      <i className="fa-solid fa-circle-minus"></i>
+                      <i className="fa-regular fa-bookmark"></i>
+                      <i className="fa-solid fa-ellipsis"></i>
                     </div>
-                  </div>
-                  <div className="flex gap-6">
-                    <i className="fa-solid fa-circle-minus"></i>
-                    <i className="fa-regular fa-bookmark"></i>
-                    <i className="fa-solid fa-ellipsis"></i>
                   </div>
                 </div>
+                <div>
+                  <Image
+                    src="/assects/background.png"
+                    alt="Placeholder Image"
+                    width={600}
+                    height={600}
+                    priority
+                    className="w-44 h-28 rounded-md"
+                  />
+                </div>
               </div>
-              <div>
-                <Image
-                  src="/assects/background.png"
-                  alt="Placeholder Image"
-                  width={600}
-                  height={600}
-                  priority
-                  className="w-44 h-28 rounded-md"
-                />
-              </div>
+              <hr className="border-t border-gray-200 mt-4" />
             </div>
-            <hr className="border-t border-gray-200 mt-4" />
+
+            <div>
+              <div className="flex mt-4 text-black justify-between items-center ">
+                <div className="flex flex-col gap-4">
+                  <p className="text-sm text-gray-600">Melody Koh</p>
+                  <h1 className="text-xl font-extrabold text-black ">
+                    The UX job Market REALLY sucks right now
+                  </h1>
+                  <h4 className="text-base font-medium text-gray-400">
+                    Why you should pivot and change directions right NOW
+                  </h4>
+                  <div className="flex text-gray-500 justify-between py-3 ">
+                    <div className=" flex gap-4 ">
+                      <p>Aug 22, 2024</p>
+                      <div className="flex items-center gap-1.5">
+                        <i className="fa-solid fa-hands-clapping"></i>
+                        <p>5.5K</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 justify-center">
+                        <i className="fa-solid fa-comment"></i>
+                        <p>39</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-6">
+                      <i className="fa-solid fa-circle-minus"></i>
+                      <i className="fa-regular fa-bookmark"></i>
+                      <i className="fa-solid fa-ellipsis"></i>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Image
+                    src="/assects/background.png"
+                    alt="Placeholder Image"
+                    width={600}
+                    height={600}
+                    priority
+                    className="w-44 h-28 rounded-md"
+                  />
+                </div>
+              </div>
+              <hr className="border-t border-gray-200 mt-4" />
+            </div>
           </div>
         </div>
         <div className="border-l border-gray-200 h-full"></div>
