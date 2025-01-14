@@ -21,3 +21,33 @@ export async function GET() {
     );
   }
 }
+
+export const POST = async (request: Request) => {
+  try {
+    const body = await request.json();
+
+    if (!body.title || !body.description) {
+      return NextResponse.json(
+        { message: "Title and description are required." },
+        { status: 400 }
+      );
+    }
+
+    await connect();
+
+    const newBlog = new Blog(body);
+    await newBlog.save();
+
+    return NextResponse.json(
+      { message: "Blog is Created", blog: newBlog },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error(error);
+
+    return NextResponse.json(
+      { message: "Error in creating Blog ", error: error.message },
+      { status: 500 }
+    );
+  }
+};
