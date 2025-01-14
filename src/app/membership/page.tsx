@@ -29,7 +29,7 @@ const Blog = () => {
         const data = await response.json();
 
         if (data.blogs && data.blogs.length > 0) {
-          setBlog(data.blogs[1]); // Assuming you're showing the first blog
+          setBlog(data.blogs[0]); // Assuming you're showing the first blog
         }
       } catch (error: any) {
         console.error("Error fetching blog: " + error.message);
