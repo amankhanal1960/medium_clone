@@ -1,9 +1,10 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
-import { recommendations } from "@/constants";
 import Image from "next/image";
+import { recommendations } from "@/constants";
 
 interface Blog {
   author: string;
@@ -17,52 +18,48 @@ interface Blog {
 }
 
 const Blog = () => {
-  // const [activeLink, setActiveLink] = useState("");
-  const [blog, setBlog] = useState<Blog | null>(null);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
-  //fetch the data when the component mounts
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchBlogs = async () => {
       try {
         const response = await fetch("http://localhost:3000/api/blogs");
         const data = await response.json();
 
         if (data.blogs && data.blogs.length > 0) {
-          setBlog(data.blogs[0]); // Assuming you're showing the first blog
+          setBlogs(data.blogs);
         }
       } catch (error: any) {
-        console.error("Error fetching blog: " + error.message);
+        console.error("Error fetching blogs: " + error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlog();
+    fetchBlogs();
   }, []);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  if (!blog) {
-    return <p>No blog found</p>;
+  if (blogs.length === 0) {
+    return <p>No blogs found</p>;
   }
 
   return (
     <div>
       <Navbar />
       <div className="flex h-screen">
-        {/* left section */}
-
         <div className="bg-white w-full lg:w-[65%]">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
             <div className="text-gray-500 py-8 items-center justify-center">
               <div className="flex flex-col items-center">
-                <ul className=" flex gap-6 text-sm font-semibold">
+                <ul className="flex gap-6 text-sm font-semibold">
                   {recommendations.map((item, index) => (
                     <li key={index}>
-                      <Link className="hover:text-gray-900 " href={item.href}>
+                      <Link className="hover:text-gray-900" href={item.href}>
                         {item.label}
                       </Link>
                     </li>
@@ -71,52 +68,52 @@ const Blog = () => {
               </div>
               <hr className="border-t border-gray-200 mt-4" />
             </div>
-            <div>
-              <div className="flex mt-4 text-black justify-between items-center ">
-                <div className="flex flex-col gap-4">
-                  <p className="text-sm text-gray-600">{blog.author}</p>
-                  <h1 className="text-xl font-extrabold text-black ">
-                    {blog.title}
-                  </h1>
-                  <h4 className="text-base font-medium text-gray-400">
-                    {blog.description}
-                  </h4>
-                  <div className="flex text-gray-500 justify-between py-3 ">
-                    <div className=" flex gap-4 ">
-                      <p>Aug 22, 2024</p>
-                      <div className="flex items-center gap-1.5">
-                        <i className="fa-solid fa-hands-clapping"></i>
-                        <p>5.5K</p>
+
+            {blogs.map((blog, index) => (
+              <div key={index} className="mb-8">
+                <div className="flex justify-between items-start">
+                  <div className="flex-grow pr-4">
+                    <p className="text-sm text-gray-600">{blog.author}</p>
+                    <h1 className="text-xl font-extrabold text-black mt-2">
+                      {blog.title}
+                    </h1>
+                    <h4 className="text-base font-medium text-gray-400 mt-2">
+                      {blog.description}
+                    </h4>
+                    <div className="flex items-center mt-4 text-gray-500">
+                      <p>{blog.date}</p>
+                      <div className="flex items-center ml-4">
+                        <i className="fa-solid fa-hands-clapping mr-1"></i>
+                        <p>{blog.likes}</p>
                       </div>
-                      <div className="flex items-center gap-1.5 justify-center">
-                        <i className="fa-solid fa-comment"></i>
-                        <p>39</p>
+                      <div className="flex items-center ml-4">
+                        <i className="fa-solid fa-comment mr-1"></i>
+                        <p>{blog.comments}</p>
                       </div>
                     </div>
-                    <div className="flex gap-6">
+                  </div>
+                  <div className="flex flex-col items-end w-[176px]">
+                    <Image
+                      src={blog.image}
+                      alt="Blog Image"
+                      width={176}
+                      height={112}
+                      className="w-44 h-28 rounded-md mb-4 object-cover"
+                    />
+                    <div className="flex gap-4  text-gray-500">
                       <i className="fa-solid fa-circle-minus"></i>
                       <i className="fa-regular fa-bookmark"></i>
                       <i className="fa-solid fa-ellipsis"></i>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <Image
-                    src="/assects/background.png"
-                    alt="Placeholder Image"
-                    width={600}
-                    height={600}
-                    priority
-                    className="w-44 h-28 rounded-md"
-                  />
-                </div>
+                <hr className="border-t border-gray-200 mt-6" />
               </div>
-              <hr className="border-t border-gray-200 mt-4" />
-            </div>
+            ))}
           </div>
         </div>
+
         <div className="border-l border-gray-200 h-full"></div>
-        {/* right section */}
         <div className="bg-white w-[35%] hidden lg:block">
           <div className="h-full text-black">
             <div className="p-4">
