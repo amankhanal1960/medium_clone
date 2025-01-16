@@ -41,7 +41,11 @@ const Blog = () => {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <p className="text-black font-bold h-screen bg-white text-xl">
+        Loading...
+      </p>
+    );
   }
 
   if (blogs.length === 0) {
@@ -51,7 +55,7 @@ const Blog = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-screen">
+      <div className="flex h-full">
         <div className="bg-white w-full lg:w-[65%]">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
             <div className="text-gray-500 py-8 items-center justify-center">
@@ -71,7 +75,7 @@ const Blog = () => {
 
             {blogs.map((blog, index) => (
               <div key={index} className="mb-8">
-                <div className="flex justify-between items-start">
+                <div className="flex justify-around items-end">
                   <div className="flex-grow pr-4">
                     <p className="text-sm text-gray-600">{blog.author}</p>
                     <h1 className="text-xl font-extrabold text-black mt-2">
@@ -92,19 +96,19 @@ const Blog = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end w-[176px]">
+                  <div className="flex gap-6 text-gray-500 pr-10">
+                    <i className="fa-solid fa-circle-minus"></i>
+                    <i className="fa-regular fa-bookmark"></i>
+                    <i className="fa-solid fa-ellipsis"></i>
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
                     <Image
                       src={blog.image}
                       alt="Blog Image"
                       width={176}
                       height={112}
-                      className="w-44 h-28 rounded-md mb-4 object-cover"
+                      className="min-w-44 h-28 rounded-md mb-4 object-cover"
                     />
-                    <div className="flex gap-4  text-gray-500">
-                      <i className="fa-solid fa-circle-minus"></i>
-                      <i className="fa-regular fa-bookmark"></i>
-                      <i className="fa-solid fa-ellipsis"></i>
-                    </div>
                   </div>
                 </div>
                 <hr className="border-t border-gray-200 mt-6" />
