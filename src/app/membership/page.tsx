@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Navbar from "@/components/navbar";
+import Navbar from "@/src/components/navbar";
 import Link from "next/link";
 import Image from "next/image";
-import { recommendations } from "@/constants";
+import { recommendations } from "@/src/constants/index";
 
 interface Blog {
   author: string;

@@ -54,6 +54,7 @@ const Navbar = () => {
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
+
   return (
     <>
       <div>
