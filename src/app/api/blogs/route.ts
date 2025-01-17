@@ -26,9 +26,9 @@ export const POST = async (request: Request) => {
   try {
     const body = await request.json();
 
-    if (!body.title || !body.description) {
+    if (!body.title || !body.description || !body.image) {
       return NextResponse.json(
-        { message: "Title and description are required." },
+        { message: "Title and description and image are required." },
         { status: 400 }
       );
     }
