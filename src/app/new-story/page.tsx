@@ -5,7 +5,7 @@ import Image from "next/image";
 import PopUp from "@/src/components/navbar";
 import { useRouter } from "next/navigation";
 
-const Story = () => {
+const story = () => {
   const router = useRouter();
 
   const handleLogin = () => {
@@ -15,10 +15,15 @@ const Story = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const togglePopup = () => setIsPopupVisible(!isPopupVisible);
 
+  //title: The state variable holding the title of the story
+  //setTitle: The function to update the title of the story when the input changes
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [isTitleEditing, setIsTitleEditing] = useState(false);
-  const [isDescriptionEditing, setIsDescriptionEditing] = useState(false);
+
+  //isTitleEditing: The boolean state determines if the title is in edit mode
+  //setisTitleEditing: The function to toggle the edit state for the title
+  const [isTitleEditing, setisTitleEditing] = useState(false);
+  const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
 
   const handlePublish = () => {
     // Add publish logic here
@@ -72,18 +77,18 @@ const Story = () => {
                 <input
                   type="text"
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  onBlur={() => setIsTitleEditing(false)}
-                  placeholder="Enter your title here"
-                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold"
+                  onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
+                  onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
+                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-700"
                   autoFocus
-                  aria-label="Edit title"
+                  aria-label="Edit Title"
                 />
               ) : (
                 <div
-                  onClick={() => setIsTitleEditing(true)}
                   className="cursor-text text-2xl font-bold text-gray-700"
+                  onClick={() => setisTitleEditing(true)} //starts editing mode when clicked
                 >
+                  {/* shows either the current title or the placeholder */}
                   {title || "Title"}
                 </div>
               )}
@@ -95,16 +100,15 @@ const Story = () => {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  onBlur={() => setIsDescriptionEditing(false)}
-                  placeholder="Write your description here..."
-                  className="mt-1 block w-full rounded-md border-none outline-none sm:text-sm resize-none"
-                  rows={4}
+                  placeholder="Write Your Story...."
+                  onBlur={() => setisDescriptionEditing(false)}
+                  className="mt-1 block w-full rounded-md border-gray-300 border-none  outline-none sm:text-sm text-gray-700 resize-none"
                   autoFocus
-                  aria-label="Edit description"
+                  aria-label="Edit Description"
                 ></textarea>
               ) : (
                 <div
-                  onClick={() => setIsDescriptionEditing(true)}
+                  onClick={() => setisDescriptionEditing(true)}
                   className="cursor-text text-gray-700 min-h-[100px]"
                 >
                   {description || "Description"}
@@ -118,4 +122,4 @@ const Story = () => {
   );
 };
 
-export default Story;
+export default story;
