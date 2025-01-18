@@ -48,6 +48,9 @@ const Navbar = () => {
   const handleLogin = () => {
     router.push("/");
   };
+  const handleStory = () => {
+    router.push("/new-story");
+  };
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
@@ -76,7 +79,10 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex gap-10 items-center">
-            <div className="sm:flex gap-3 items-center cursor-pointer hidden">
+            <div
+              className="sm:flex gap-3 items-center cursor-pointer hidden"
+              onClick={handleStory}
+            >
               <i className="fa-regular fa-pen-to-square fa-lg text-gray-400 hover:text-gray-900"></i>
               <p className="font-normal text-gray-600 text-base  hover:text-gray-900">
                 Write
