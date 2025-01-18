@@ -1,10 +1,6 @@
-// "use client";
-// import React, { useEffect, useState } from "react";
-import { inter, playfairDisplay } from "@/components/ui/fonts";
-// import Header from "@/components/Header";
-// import Footer from "@/components/Footer";
+import { inter, playfairDisplay } from "@/src/components/ui/fonts";
 import "./globals.css";
-import { ClientOnlyGoogleOAuthProvider } from "@/components/GoogleOathProvider";
+import { ClientOnlyGoogleOAuthProvider } from "@/src/components/GoogleOathProvider";
 
 export default function RootLayout({
   children,
