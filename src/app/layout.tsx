@@ -10,6 +10,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning={true}
         className={`${inter.className} ${playfairDisplay.className} antialiased`}
       >
         <ClientOnlyGoogleOAuthProvider>
