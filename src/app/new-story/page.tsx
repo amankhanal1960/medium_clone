@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import PopUp from "@/src/components/navbar";
@@ -19,16 +19,42 @@ const story = () => {
   //setTitle: The function to update the title of the story when the input changes
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [author, setAuthor] = useState("");
+  const [date, setDate] = useState("");
+  const [image, setImage] = useState("");
 
   //isTitleEditing: The boolean state determines if the title is in edit mode
   //setisTitleEditing: The function to toggle the edit state for the title
   const [isTitleEditing, setisTitleEditing] = useState(false);
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
+  const [isAuthorEditing, setisAuthorEditing] = useState(false);
+  const [isDateEditing, setisDateEditing] = useState(false);
+  const [isImageEditing, setisImageEditing] = useState(false);
 
-  const handlePublish = () => {
-    // Add publish logic here
-    console.log("Publishing:", { title, description });
-    // You might want to send this data to an API or perform other actions
+  const handlePublish = async (event: any) => {
+    event.preventDefault();
+    console.log("Publishing:", { title, description, author, date, image });
+
+    try {
+      const response = await fetch("http://localhost:3000/api/blogs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, author, date, image }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Blog published successfully", data.blog);
+        router.push("/membership");
+      } else {
+        console.error("Failed to publish blog", data.message);
+      }
+    } catch (error: any) {
+      console.error("Error publishing blog: " + error.message);
+    }
   };
 
   return (
@@ -50,6 +76,7 @@ const story = () => {
             <button
               onClick={handlePublish}
               className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200"
+              disabled={!title || !description || !author || !date || !image}
             >
               Publish
             </button>
@@ -71,6 +98,51 @@ const story = () => {
         {/* form section */}
         <div className="mt-6 max-w-[800px] mx-auto px-6">
           <form className="flex flex-col gap-4">
+            {/* Date Input */}
+            <div>
+              {isDateEditing ? (
+                <input
+                  type="text"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  placeholder="Date"
+                  onBlur={() => setisDateEditing(false)}
+                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
+                  autoFocus
+                  aria-label="Edit Date"
+                />
+              ) : (
+                <div
+                  onClick={() => setisDateEditing(true)}
+                  className="cursor-text text-gray-700"
+                >
+                  {date || "Date"}
+                </div>
+              )}
+            </div>
+
+            {/* Author Input */}
+            <div>
+              {isAuthorEditing ? (
+                <input
+                  type="text"
+                  value={author}
+                  onChange={(e) => setAuthor(e.target.value)}
+                  placeholder="Author"
+                  onBlur={() => setisAuthorEditing(false)}
+                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
+                  autoFocus
+                  aria-label="Edit Author"
+                />
+              ) : (
+                <div
+                  onClick={() => setisAuthorEditing(true)}
+                  className="cursor-text text-gray-700"
+                >
+                  {author || "Author"}
+                </div>
+              )}
+            </div>
             {/* Title Input */}
             <div>
               {isTitleEditing ? (
@@ -78,6 +150,7 @@ const story = () => {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
+                  placeholder="Title"
                   onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
                   className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-700"
                   autoFocus
@@ -102,7 +175,7 @@ const story = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Write Your Story...."
                   onBlur={() => setisDescriptionEditing(false)}
-                  className="mt-1 block w-full rounded-md border-gray-300 border-none  outline-none sm:text-sm text-gray-700 resize-none"
+                  className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-700 resize-none"
                   autoFocus
                   aria-label="Edit Description"
                 ></textarea>
@@ -112,6 +185,28 @@ const story = () => {
                   className="cursor-text text-gray-700 min-h-[100px]"
                 >
                   {description || "Description"}
+                </div>
+              )}
+            </div>
+            <div>
+              {isImageEditing ? (
+                <input
+                  type="text"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="Image URL"
+                  onBlur={() => setisImageEditing(false)}
+                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
+                  autoFocus
+                  aria-label="Edit Image URL"
+                  required
+                />
+              ) : (
+                <div
+                  onClick={() => setisImageEditing(true)}
+                  className="cursor-text text-gray-700"
+                >
+                  {image || "Image URL (required)"}
                 </div>
               )}
             </div>
