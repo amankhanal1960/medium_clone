@@ -43,3 +43,35 @@ export const PUT = async (
     );
   }
 };
+
+//Delete Blog
+export const DELETE = async (params: { id: string }) => {
+  try {
+    const { id } = params;
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Blog ID is required." },
+        { status: 400 }
+      );
+    }
+    await connect();
+
+    // Delete the blog document from the database by its ID
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+
+    if (!deletedBlog) {
+      return NextResponse.json({ message: "Blog not found." }, { status: 404 });
+    }
+    return NextResponse.json(
+      { message: "Blog deleted successfully.", blog: deletedBlog },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    console.error("Error deleting blog", error);
+    return NextResponse.json(
+      { message: "Internal server Error. please try again later." },
+      { status: 500 }
+    );
+  }
+};
