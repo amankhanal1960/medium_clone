@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import PopUp from "@/src/components/navbar";
@@ -20,7 +20,6 @@ const story = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
-  const [date, setDate] = useState("");
   const [image, setImage] = useState("");
 
   //isTitleEditing: The boolean state determines if the title is in edit mode
@@ -28,12 +27,18 @@ const story = () => {
   const [isTitleEditing, setisTitleEditing] = useState(false);
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
   const [isAuthorEditing, setisAuthorEditing] = useState(false);
-  const [isDateEditing, setisDateEditing] = useState(false);
   const [isImageEditing, setisImageEditing] = useState(false);
 
   const handlePublish = async (event: any) => {
     event.preventDefault();
-    console.log("Publishing:", { title, description, author, date, image });
+    const currentDate = new Date().toLocaleDateString();
+    console.log("Publishing:", {
+      title,
+      description,
+      author,
+      currentDate,
+      image,
+    });
 
     try {
       const response = await fetch("http://localhost:3000/api/blogs", {
@@ -41,7 +46,13 @@ const story = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, description, author, date, image }),
+        body: JSON.stringify({
+          title,
+          description,
+          author,
+          currentDate,
+          image,
+        }),
       });
 
       const data = await response.json();
@@ -76,7 +87,7 @@ const story = () => {
             <button
               onClick={handlePublish}
               className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200"
-              disabled={!title || !description || !author || !date || !image}
+              disabled={!title || !description || !author || !image}
             >
               Publish
             </button>
@@ -98,29 +109,6 @@ const story = () => {
         {/* form section */}
         <div className="mt-6 max-w-[800px] mx-auto px-6">
           <form className="flex flex-col gap-4">
-            {/* Date Input */}
-            <div>
-              {isDateEditing ? (
-                <input
-                  type="text"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  placeholder="Date"
-                  onBlur={() => setisDateEditing(false)}
-                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
-                  autoFocus
-                  aria-label="Edit Date"
-                />
-              ) : (
-                <div
-                  onClick={() => setisDateEditing(true)}
-                  className="cursor-text text-gray-700"
-                >
-                  {date || "Date"}
-                </div>
-              )}
-            </div>
-
             {/* Author Input */}
             <div>
               {isAuthorEditing ? (
@@ -191,7 +179,7 @@ const story = () => {
             <div>
               {isImageEditing ? (
                 <input
-                  type="text"
+                  type="string"
                   value={image}
                   onChange={(e) => setImage(e.target.value)}
                   placeholder="Image URL"

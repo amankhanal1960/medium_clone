@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { navLinks } from "@/constants";
+import { navLinks } from "@/src/constants";
 import { Button } from "./ui/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
