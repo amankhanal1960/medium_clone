@@ -45,7 +45,10 @@ export const PUT = async (
 };
 
 //Delete Blog
-export const DELETE = async (params: { id: string }) => {
+export const DELETE = async (
+  req: Request,
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = params;
 
@@ -57,7 +60,6 @@ export const DELETE = async (params: { id: string }) => {
     }
     await connect();
 
-    // Delete the blog document from the database by its ID
     const deletedBlog = await Blog.findByIdAndDelete(id);
 
     if (!deletedBlog) {
@@ -70,7 +72,7 @@ export const DELETE = async (params: { id: string }) => {
   } catch (error: any) {
     console.error("Error deleting blog", error);
     return NextResponse.json(
-      { message: "Internal server Error. please try again later." },
+      { message: "Internal server error. Please try again later." },
       { status: 500 }
     );
   }

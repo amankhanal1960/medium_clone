@@ -43,7 +43,7 @@ const Blog = () => {
   if (loading) {
     return (
       <p className="text-black font-bold h-screen bg-white text-xl">
-        Loading...
+        Gooning...
       </p>
     );
   }
