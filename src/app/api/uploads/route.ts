@@ -1,57 +1,35 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { File } from "formidable";
-import fs from "fs";
+import { type NextRequest, NextResponse } from "next/server";
+import { writeFile } from "fs/promises";
 import path from "path";
-import { NextResponse } from "next/server";
 
-// Disable default body parsing to handle file uploads
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// Handle POST method for file uploads
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(request: NextRequest) {
   try {
-    // Define a directory for storing uploaded files
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    const data = await request.formData();
+    const file: File | null = data.get("image") as unknown as File;
 
-    // Ensure the uploads directory exists
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
+    if (!file) {
+      return NextResponse.json(
+        { success: false, message: "No file uploaded" },
+        { status: 400 }
+      );
     }
 
-    // Configure formidable
-    const form = formidable({
-      uploadDir, // Set the upload directory here
-      keepExtensions: true, // Retain the file's original extension
-      multiples: false, // Accept only one file
-    });
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    // Return a promise because form.parse() is async
-    return new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) {
-          console.error("Error parsing the form:", err);
-          return res
-            .status(500)
-            .json({ message: "Error processing the upload." });
-        }
+    const uploadDir = path.join(process.cwd(), "public", "uploads");
+    const fileName = `${Date.now()}-${file.name}`;
+    const filePath = path.join(uploadDir, fileName);
 
-        const file = files.image as File | undefined;
-        if (!file) {
-          return res.status(400).json({ message: "No file uploaded." });
-        }
+    await writeFile(filePath, buffer);
 
-        const fileUrl = `/uploads/${path.basename(file.filepath)}`;
-        res.status(200).json({ url: fileUrl });
-      });
-    });
+    const fileUrl = `/uploads/${fileName}`;
+    return NextResponse.json({ success: true, url: fileUrl });
   } catch (error) {
-    console.error("Unexpected error:", error);
-    return res.status(500).json({
-      message: "Server error. Please try again later.",
-    });
+    console.error("Error in upload handler:", error);
+    return NextResponse.json(
+      { success: false, message: "Server error" },
+      { status: 500 }
+    );
   }
 }

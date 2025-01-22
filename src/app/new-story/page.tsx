@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import PopUp from "@/src/components/navbar";
@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 const story = () => {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = () => {
     router.push("/");
@@ -21,26 +22,52 @@ const story = () => {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [image, setImage] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   //isTitleEditing: The boolean state determines if the title is in edit mode
   //setisTitleEditing: The function to toggle the edit state for the title
   const [isTitleEditing, setisTitleEditing] = useState(false);
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
   const [isAuthorEditing, setisAuthorEditing] = useState(false);
-  const [isImageEditing, setisImageEditing] = useState(false);
+
+  const handleImageClick = () => {
+    //The function to open the file input dialog when the image is clicked
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setImage(URL.createObjectURL(file));
+    }
+  };
 
   const handlePublish = async (event: any) => {
     event.preventDefault();
     const currentDate = new Date().toLocaleDateString();
-    console.log("Publishing:", {
-      title,
-      description,
-      author,
-      currentDate,
-      image,
-    });
 
     try {
+      let imageUrl = "";
+      if (imageFile) {
+        const formdata = new FormData();
+        formdata.append("image", imageFile);
+        const uploadResponse = await fetch(
+          "http://localhost:3000/api/uploads",
+          {
+            method: "POST",
+            body: formdata,
+          }
+        );
+        if (uploadResponse.ok) {
+          const { url } = await uploadResponse.json();
+          imageUrl = url;
+        } else {
+          throw new Error("Failed to upload image");
+        }
+      }
+
+      //Publish the blog to the API
       const response = await fetch("http://localhost:3000/api/blogs", {
         method: "POST",
         headers: {
@@ -50,8 +77,8 @@ const story = () => {
           title,
           description,
           author,
-          currentDate,
-          image,
+          date: currentDate,
+          image: imageUrl,
         }),
       });
 
@@ -176,27 +203,32 @@ const story = () => {
                 </div>
               )}
             </div>
+
+            {/* Image Input */}
             <div>
-              {isImageEditing ? (
-                <input
-                  type="string"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="Image URL"
-                  onBlur={() => setisImageEditing(false)}
-                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
-                  autoFocus
-                  aria-label="Edit Image URL"
-                  required
-                />
-              ) : (
-                <div
-                  onClick={() => setisImageEditing(true)}
-                  className="cursor-text text-gray-700"
-                >
-                  {image || "Image URL (required)"}
-                </div>
-              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                ref={fileInputRef}
+              />
+              <div
+                onClick={handleImageClick}
+                className="cursor-pointer text-gray-700"
+              >
+                {image ? (
+                  <Image
+                    src={image || "/assects/placeholder.svg"}
+                    alt="Blog Image"
+                    width={200}
+                    height={200}
+                    className="rounded mt-2"
+                  />
+                ) : (
+                  "Click to upload image"
+                )}
+              </div>
             </div>
           </form>
         </div>
