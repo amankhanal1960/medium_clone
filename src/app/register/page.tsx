@@ -31,14 +31,14 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 ease-in-out ${
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
         isRegisterPopupOpen
           ? "bg-gray-50 bg-opacity-90"
           : "bg-gray-50 bg-opacity-0"
       }`}
     >
       <div
-        className={`bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative transition-transform duration-500 ease-in-out ${
+        className={`bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative transition-transform duration-300 ease-in-out ${
           isRegisterPopupOpen
             ? "transform translate-y-0 scale-x-100 scale-y-100 opacity-100" // Popup fully visible and scaled to 100%
             : "transform translate-y-[10%] scale-x-[0.9] scale-y-[0.9] opacity-0" // Starts from 70% width and height, moved from bottom

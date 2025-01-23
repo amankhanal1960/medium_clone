@@ -42,9 +42,14 @@ const Blog = () => {
 
   if (loading) {
     return (
-      <p className="text-black font-bold h-screen bg-white text-xl">
-        Gooning...
-      </p>
+      <div className="flex items-center justify-center h-screen bg-white">
+        <div className="flex flex-col items-center space-y-4 animate-fadeIn">
+          <div className="animate-spin border-t-4 border-green-500 w-12 h-12 rounded-full"></div>
+          <span className="text-gray-700 font-medium text-lg animate-bounce">
+            Please wait, fetching data...
+          </span>
+        </div>
+      </div>
     );
   }
 
