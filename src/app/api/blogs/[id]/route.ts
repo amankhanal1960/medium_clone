@@ -53,24 +53,30 @@ export const DELETE = async (
     const { id } = params;
 
     if (!id) {
+      console.error("Blog ID is missing in the request parameters.");
       return NextResponse.json(
         { message: "Blog ID is required." },
         { status: 400 }
       );
     }
-    await connect();
 
+    // Connect to the database
+    await connect();
+    console.log(`Attempting to delete blog with id: ${id}`);
+
+    // Find and delete the blog by ID
     const deletedBlog = await Blog.findByIdAndDelete(id);
 
     if (!deletedBlog) {
       return NextResponse.json({ message: "Blog not found." }, { status: 404 });
     }
+
     return NextResponse.json(
       { message: "Blog deleted successfully.", blog: deletedBlog },
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error deleting blog", error);
+    console.error("Error deleting blog:", error);
     return NextResponse.json(
       { message: "Internal server error. Please try again later." },
       { status: 500 }

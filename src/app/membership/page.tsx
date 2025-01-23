@@ -8,6 +8,7 @@ import { recommendations } from "@/src/constants/index";
 import { useRouter } from "next/navigation";
 
 interface Blog {
+  id: string;
   author: string;
   title: string;
   subtitle: string;
@@ -24,6 +25,7 @@ const Blog = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch blogs on component mount
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -31,7 +33,12 @@ const Blog = () => {
         const data = await response.json();
 
         if (data.blogs && data.blogs.length > 0) {
-          setBlogs(data.blogs);
+          // Map `_id` to `id` for frontend consistency
+          const formattedBlogs = data.blogs.map((blog: any) => ({
+            ...blog,
+            id: blog._id, // Map MongoDB `_id` to `id`
+          }));
+          setBlogs(formattedBlogs);
         }
       } catch (error: any) {
         console.error("Error fetching blogs: " + error.message);
@@ -43,6 +50,7 @@ const Blog = () => {
     fetchBlogs();
   }, []);
 
+  // Loading screen
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-white">
@@ -56,32 +64,27 @@ const Blog = () => {
     );
   }
 
-  if (blogs.length === 0) {
-    return <p>No blogs found</p>;
-  }
-
-  //implemetation of the delete functionality
+  // Delete blog
   const removeBlog = async (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/blogs?id=${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:3000/api/blogs/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("Failed to delete blog:", errorData.message);
           throw new Error(errorData.message || "Failed to delete blog");
         }
-        console.log("Blog deleted successfully");
 
-        //refresh the page to reflect the deleted blog
-        router.refresh();
+        console.log("Blog deleted successfully");
+        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
       } catch (error: any) {
-        console.error("Error deleting blog: " + error.message);
+        console.error("Error deleting blog:", error.message);
       }
     }
   };
@@ -89,14 +92,16 @@ const Blog = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-full">
+      <div className="flex h-screen h-full">
+        {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%]">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
+            {/* Recommendations Section */}
             <div className="text-gray-500 py-8 items-center justify-center">
               <div className="flex flex-col items-center">
                 <ul className="flex gap-6 text-sm font-semibold">
                   {recommendations.map((item, index) => (
-                    <li key={index}>
+                    <li key={`${item.href}-${index}`}>
                       <Link className="hover:text-gray-900" href={item.href}>
                         {item.label}
                       </Link>
@@ -107,9 +112,11 @@ const Blog = () => {
               <hr className="border-t border-gray-200 mt-4" />
             </div>
 
-            {blogs.map((blog, index) => (
-              <div key={index} className="mb-8">
+            {/* Blog Cards */}
+            {blogs.map((blog) => (
+              <div key={blog.id} className="mb-8">
                 <div className="flex justify-around items-end">
+                  {/* Blog Details */}
                   <div className="flex-grow pr-4">
                     <p className="text-sm text-gray-600">{blog.author}</p>
                     <h1 className="text-xl font-extrabold text-black mt-2">
@@ -130,6 +137,7 @@ const Blog = () => {
                       </div>
                     </div>
                   </div>
+                  {/* Blog Actions */}
                   <div className="flex gap-6 text-gray-500 pr-10">
                     <i
                       onClick={() => removeBlog(blog.id)}
@@ -138,6 +146,7 @@ const Blog = () => {
                     <i className="fa-regular fa-bookmark"></i>
                     <i className="fa-solid fa-ellipsis"></i>
                   </div>
+                  {/* Blog Image */}
                   <div className="flex flex-col items-center justify-center">
                     <Image
                       src={blog.image}
@@ -154,7 +163,10 @@ const Blog = () => {
           </div>
         </div>
 
+        {/* Divider */}
         <div className="border-l border-gray-200 h-full"></div>
+
+        {/* Sidebar */}
         <div className="bg-white w-[35%] hidden lg:block">
           <div className="h-full text-black">
             <div className="p-4">
