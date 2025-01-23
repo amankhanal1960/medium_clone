@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useState, useEffect } from "react";
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -11,6 +12,12 @@ interface LoginPopupProps {
 //({ onClose }) this props object is destructured to extract the onClose function
 const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   //useGoogleLogin hook to handle the login process
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
+  useEffect(() => {
+    setIsRegisterPopupOpen(true);
+    return () => setIsRegisterPopupOpen(false);
+  }, []);
+
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
@@ -19,8 +26,20 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-80">
-      <div className="bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 ease-in-out ${
+        isRegisterPopupOpen
+          ? "bg-gray-50 bg-opacity-90"
+          : "bg-gray-50 bg-opacity-0"
+      }`}
+    >
+      <div
+        className={`bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative transition-transform duration-500 ease-in-out ${
+          isRegisterPopupOpen
+            ? "transform translate-y-0 scale-x-100 scale-y-100 opacity-100" // Popup fully visible and scaled to 100%
+            : "transform translate-y-[10%] scale-x-[0.9] scale-y-[0.9] opacity-0" // Starts from 70% width and height, moved from bottom
+        }`}
+      >
         <button
           className="absolute top-4 right-4 w-6 h-6 text-gray-600 hover:text-gray-800"
           onClick={onClose}

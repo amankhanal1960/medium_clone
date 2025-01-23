@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useState, useEffect } from "react";
 
 interface RegisterPopupProps {
   onClose: () => void;
@@ -14,7 +15,13 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
   onClose,
   mode = "start",
 }) => {
-  //useGoogleLogin hook to handle the login process
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
+
+  useEffect(() => {
+    setIsRegisterPopupOpen(true);
+    return () => setIsRegisterPopupOpen(false);
+  }, []);
+
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       console.log(tokenResponse);
@@ -23,17 +30,27 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-80">
-      {/* Login form */}
-      <div className="bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative">
-        <div className="relative">
-          <img
-            src="/assects/x.svg"
-            alt="Close button"
-            className="absolute top-0 right-0 w-6 h-6 cursor-pointer z-30 md:-translate-y-6 md:translate-x-6 -translate-y-9 -translate-x-3"
-            onClick={onClose}
-          />
-        </div>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-500 ease-in-out ${
+        isRegisterPopupOpen
+          ? "bg-gray-50 bg-opacity-90"
+          : "bg-gray-50 bg-opacity-0"
+      }`}
+    >
+      <div
+        className={`bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative transition-transform duration-500 ease-in-out ${
+          isRegisterPopupOpen
+            ? "transform translate-y-0 scale-x-100 scale-y-100 opacity-100" // Popup fully visible and scaled to 100%
+            : "transform translate-y-[10%] scale-x-[0.9] scale-y-[0.9] opacity-0" // Starts from 70% width and height, moved from bottom
+        }`}
+      >
+        <button
+          className="absolute top-4 right-4 w-6 h-6 text-gray-600 hover:text-gray-800"
+          onClick={onClose}
+          aria-label="Close login popup"
+        >
+          <img src="/assects/x.svg" alt="Close" className="w-full h-full" />
+        </button>
         <h2 className="text-[26px] font-normal text-black mt-20 mb-20 text-center">
           {mode === "write"
             ? "Create an account to start writing"
