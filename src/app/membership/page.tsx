@@ -5,6 +5,7 @@ import Navbar from "@/src/components/navbar";
 import Link from "next/link";
 import Image from "next/image";
 import { recommendations } from "@/src/constants/index";
+import { useRouter } from "next/navigation";
 
 interface Blog {
   author: string;
@@ -18,6 +19,8 @@ interface Blog {
 }
 
 const Blog = () => {
+  const router = useRouter();
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,6 +59,32 @@ const Blog = () => {
   if (blogs.length === 0) {
     return <p>No blogs found</p>;
   }
+
+  //implemetation of the delete functionality
+  const removeBlog = async (id: string) => {
+    const confirmed = confirm("Are you sure you want to remove?");
+    if (confirmed) {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/blogs?id=${id}`,
+          {
+            method: "DELETE",
+          }
+        );
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Failed to delete blog:", errorData.message);
+          throw new Error(errorData.message || "Failed to delete blog");
+        }
+        console.log("Blog deleted successfully");
+
+        //refresh the page to reflect the deleted blog
+        router.refresh();
+      } catch (error: any) {
+        console.error("Error deleting blog: " + error.message);
+      }
+    }
+  };
 
   return (
     <div>
@@ -102,7 +131,10 @@ const Blog = () => {
                     </div>
                   </div>
                   <div className="flex gap-6 text-gray-500 pr-10">
-                    <i className="fa-solid fa-circle-minus"></i>
+                    <i
+                      onClick={() => removeBlog(blog.id)}
+                      className="fa-solid fa-circle-minus cursor-pointer"
+                    ></i>
                     <i className="fa-regular fa-bookmark"></i>
                     <i className="fa-solid fa-ellipsis"></i>
                   </div>
