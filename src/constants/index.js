@@ -1,7 +1,6 @@
 export const navLinks = [
   { href: "/ourstory", label: "Our story" },
   { href: "/membership", label: "Membership" },
-  { href: "/register?type=write", label: "Write" },
 ];
 
 export const footerLinks = [

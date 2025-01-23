@@ -3,17 +3,13 @@
 import type React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 
-interface RegisterPopupProps {
+interface LoginPopupProps {
   onClose: () => void;
-  mode?: "write" | "start";
 }
 
 //this declares a functional React component named LoginPopup using typescript
 //({ onClose }) this props object is destructured to extract the onClose function
-const RegisterPopup: React.FC<RegisterPopupProps> = ({
-  onClose,
-  mode = "start",
-}) => {
+const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   //useGoogleLogin hook to handle the login process
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
@@ -24,31 +20,26 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-50 bg-opacity-80">
-      {/* Login form */}
       <div className="bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative">
-        <div className="relative">
-          <img
-            src="/assects/x.svg"
-            alt="Close button"
-            className="absolute top-0 right-0 w-6 h-6 cursor-pointer z-30 md:-translate-y-6 md:translate-x-6 -translate-y-9 -translate-x-3"
-            onClick={onClose}
-          />
-        </div>
-        <h2 className="text-[26px] font-normal text-black mt-20 mb-20 text-center">
-          {mode === "write"
-            ? "Create an account to start writing"
-            : "Join medium"}
+        <button
+          className="absolute top-4 right-4 w-6 h-6 text-gray-600 hover:text-gray-800"
+          onClick={onClose}
+          aria-label="Close login popup"
+        >
+          <img src="/assects/x.svg" alt="Close" className="w-full h-full" />
+        </button>
+        <h2 className="text-[26px] font-normal text-black mt-[14px] mb-20 text-center">
+          Welcome back.
         </h2>
 
         <div className="flex flex-col gap-3 items-center justify-center">
-          {/* Social buttons */}
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
             onClick={() => login()}
           >
             <img
               src="/assects/google.png"
-              alt="Google logo"
+              alt=""
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with Google</span>
@@ -57,7 +48,7 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
               src="/assects/facebook.png"
-              alt="Facebook logo"
+              alt=""
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with Facebook</span>
@@ -65,8 +56,26 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
 
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
+              src="/assects/apple-logo.png"
+              alt=""
+              className="absolute left-3 w-4 h-4"
+            />
+            <span className="flex-grow text-center">Sign in with Apple</span>
+          </button>
+
+          <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
+            <img
+              src="/assects/twitter.png"
+              alt=""
+              className="absolute left-3 w-4 h-4"
+            />
+            <span className="flex-grow text-center">Sign in with X</span>
+          </button>
+
+          <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
+            <img
               src="/assects/mail.png"
-              alt="Mail logo"
+              alt=""
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with email</span>
@@ -75,14 +84,20 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
 
         <div className="mt-10 text-center">
           <p className="text-sm font-semibold text-gray-800">
-            Already have an account?&nbsp;
-            <a href="#" className="text-green-800  font-bold">
-              Sign in
+            No account?&nbsp;
+            <a href="#" className="text-green-800 font-bold">
+              Create one
             </a>
           </p>
         </div>
 
-        <div className="mt-24 text-center text-xs font-light text-gray-600 px-10">
+        <div className="mt-16 text-center text-xs font-light text-gray-600 px-10">
+          <p className="mb-10">
+            Forgot email or trouble signing in?&nbsp;
+            <a href="#" className="underline">
+              Get help.
+            </a>
+          </p>
           <p>
             Click "Sign in" to agree to Medium's&nbsp;
             <a href="#" className="underline">
@@ -100,4 +115,4 @@ const RegisterPopup: React.FC<RegisterPopupProps> = ({
   );
 };
 
-export default RegisterPopup;
+export default LoginPopup;
