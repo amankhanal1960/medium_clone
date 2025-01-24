@@ -5,7 +5,6 @@ import Navbar from "@/src/components/navbar";
 import Link from "next/link";
 import Image from "next/image";
 import { recommendations } from "@/src/constants/index";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import BlogCardSkeleton from "./blogCardSkeleton";
 import { toast } from "react-toastify";
