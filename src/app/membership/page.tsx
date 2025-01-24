@@ -8,6 +8,7 @@ import { recommendations } from "@/src/constants/index";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import BlogCardSkeleton from "./blogCardSkeleton";
+import { toast } from "react-toastify";
 
 interface Blog {
   id: string;
@@ -22,8 +23,6 @@ interface Blog {
 }
 
 const Blog = () => {
-  const router = useRouter();
-
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -58,22 +57,20 @@ const Blog = () => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
       try {
-        const response = await fetch(`http://localhost:3000/api/blogs/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await axios.delete(`http://localhost:3000/api/blogs/${id}`);
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || "Failed to delete blog");
+        if (res.status == 200) {
+          toast.success("Blog deleted successfully!!");
+
+          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+        } else {
+          toast.error("Failed to delete blog!!");
         }
-
-        console.log("Blog deleted successfully");
-        setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
       } catch (error: any) {
         console.error("Error deleting blog:", error.message);
+        toast.error(
+          "An error occurred while deleting the blog. Please try again."
+        );
       }
     }
   };
