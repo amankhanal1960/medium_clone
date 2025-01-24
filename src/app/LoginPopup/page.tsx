@@ -10,7 +10,7 @@ interface LoginPopupProps {
 
 //this declares a functional React component named LoginPopup using typescript
 //({ onClose }) this props object is destructured to extract the onClose function
-const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
+const LoginPopup = ({ onClose }: LoginPopupProps) => {
   //useGoogleLogin hook to handle the login process
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
   useEffect(() => {

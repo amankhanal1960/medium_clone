@@ -6,6 +6,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { recommendations } from "@/src/constants/index";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import BlogCardSkeleton from "./blogCardSkeleton";
 
 interface Blog {
   id: string;
@@ -29,8 +31,9 @@ const Blog = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/blogs");
-        const data = await response.json();
+        const response = await axios.get("http://localhost:3000/api/blogs");
+        // const data = response.data;
+        const { data } = response;
 
         if (data.blogs && data.blogs.length > 0) {
           // Map `_id` to `id` for frontend consistency
@@ -49,20 +52,6 @@ const Blog = () => {
 
     fetchBlogs();
   }, []);
-
-  // Loading screen
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-white">
-        <div className="flex flex-col items-center space-y-4 animate-fadeIn">
-          <div className="animate-spin border-t-4 border-green-500 w-12 h-12 rounded-full"></div>
-          <span className="text-gray-700 font-medium text-lg animate-bounce">
-            Please wait, fetching data...
-          </span>
-        </div>
-      </div>
-    );
-  }
 
   // Delete blog
   const removeBlog = async (id: string) => {
@@ -92,7 +81,7 @@ const Blog = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-screen h-full">
+      <div className="flex h-full min-h-screen">
         {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%]">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
@@ -113,6 +102,14 @@ const Blog = () => {
             </div>
 
             {/* Blog Cards */}
+            {loading && (
+              <>
+                <BlogCardSkeleton />
+                <BlogCardSkeleton />
+                <BlogCardSkeleton />
+                <BlogCardSkeleton />
+              </>
+            )}
             {blogs.map((blog) => (
               <div key={blog.id} className="mb-8">
                 <div className="flex justify-around items-end">

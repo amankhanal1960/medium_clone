@@ -11,10 +11,7 @@ interface RegisterPopupProps {
 
 //this declares a functional React component named LoginPopup using typescript
 //({ onClose }) this props object is destructured to extract the onClose function
-const RegisterPopup: React.FC<RegisterPopupProps> = ({
-  onClose,
-  mode = "start",
-}) => {
+const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
 
   useEffect(() => {

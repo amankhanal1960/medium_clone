@@ -9,13 +9,10 @@ import RegisterPopup from "../app/register/page";
 const Header = () => {
   const [isLoginPopupOpen, setisLoginPopupOpen] = useState(false);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
-  const [registerMode, setRegisterMode] = useState(null); // Mode can be "write" or "start"
+  const [mode, setMode] = useState(null); // Mode can be "write" or "start"
 
-  const handleLogin = () => {
-    setisLoginPopupOpen(true);
-  };
   const handleRegister = (mode) => {
-    setRegisterMode(mode);
+    setMode(mode);
     setIsRegisterPopupOpen(true);
   };
 
@@ -48,7 +45,7 @@ const Header = () => {
           </ul>
           <p
             className="text-gray-950 font-medium hidden sm:flex cursor-pointer text-sm"
-            onClick={handleLogin}
+            onClick={() => setisLoginPopupOpen(true)}
           >
             Sign in
           </p>
@@ -71,7 +68,7 @@ const Header = () => {
       {isRegisterPopupOpen && (
         <RegisterPopup
           onClose={() => setIsRegisterPopupOpen(false)}
-          mode={registerMode}
+          mode={mode}
         />
       )}
     </header>

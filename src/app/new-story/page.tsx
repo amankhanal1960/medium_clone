@@ -4,6 +4,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import PopUp from "@/src/components/navbar";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const story = () => {
   const router = useRouter();
@@ -30,11 +32,6 @@ const story = () => {
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
   const [isAuthorEditing, setisAuthorEditing] = useState(false);
 
-  const handleImageClick = () => {
-    //The function to open the file input dialog when the image is clicked
-    fileInputRef.current?.click();
-  };
-
   const handleImageChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -52,43 +49,32 @@ const story = () => {
       if (imageFile) {
         const formdata = new FormData();
         formdata.append("image", imageFile);
-        const uploadResponse = await fetch(
+
+        const res = await axios.post(
           "http://localhost:3000/api/uploads",
-          {
-            method: "POST",
-            body: formdata,
-          }
+          formdata
         );
-        if (uploadResponse.ok) {
-          const { url } = await uploadResponse.json();
-          imageUrl = url;
+        if (res.status == 200) {
+          imageUrl = res.data.url;
         } else {
           throw new Error("Failed to upload image");
         }
       }
 
       //Publish the blog to the API
-      const response = await fetch("http://localhost:3000/api/blogs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          author,
-          date: currentDate,
-          image: imageUrl,
-        }),
+      const res = await axios.post("http://localhost:3000/api/blogs", {
+        title,
+        description,
+        author,
+        date: currentDate,
+        image: imageUrl,
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        console.log("Blog published successfully", data.blog);
+      if (res.status == 200) {
+        toast.success("Blog published successfully!!");
         router.push("/membership");
       } else {
-        console.error("Failed to publish blog", data.message);
+        toast.error("Failed to publish blog!!");
       }
     } catch (error: any) {
       console.error("Error publishing blog: " + error.message);
@@ -214,7 +200,7 @@ const story = () => {
                 ref={fileInputRef}
               />
               <div
-                onClick={handleImageClick}
+                onClick={() => fileInputRef.current?.click()}
                 className="cursor-pointer text-gray-700"
               >
                 {image ? (

@@ -4,8 +4,8 @@ import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.formData();
-    const file: File | null = data.get("image") as unknown as File;
+    const formData = await request.formData();
+    const file = formData.get("image") as File;
 
     if (!file) {
       return NextResponse.json(
@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
 
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     const fileName = `${Date.now()}-${file.name}`;
-    const filePath = path.join(uploadDir, fileName);
 
+    const filePath = path.join(uploadDir, fileName);
     await writeFile(filePath, buffer);
 
     const fileUrl = `/uploads/${fileName}`;

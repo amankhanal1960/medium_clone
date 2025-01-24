@@ -5,12 +5,7 @@ import RegisterPopup from "../app/register/page";
 
 const HeroSection = () => {
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
-  const [registerMode, setRegisterMode] = useState(null); // Mode can be "write" or "start"
-
-  const handleRegister = (mode) => {
-    setRegisterMode(mode);
-    setIsRegisterPopupOpen(true);
-  };
+  const MODE = "start";
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -28,7 +23,7 @@ const HeroSection = () => {
           </p>
 
           <button
-            onClick={() => handleRegister("start")}
+            onClick={() => setIsRegisterPopupOpen(true)}
             className="flex justify-center text-xl items-center gap-2 py-2 w-[196px] text-white rounded-full bg-green-700 lg:bg-black mt-12"
           >
             Start Reading
@@ -49,7 +44,7 @@ const HeroSection = () => {
       {isRegisterPopupOpen && (
         <RegisterPopup
           onClose={() => setIsRegisterPopupOpen(false)}
-          mode={registerMode}
+          mode={MODE}
         />
       )}
     </div>
