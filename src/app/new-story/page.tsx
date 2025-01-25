@@ -122,99 +122,116 @@ const Story = () => {
 
         {/* form section */}
         <div className="mt-6 max-w-[800px] mx-auto px-6">
-          <form className="flex flex-col gap-4">
-            {/* Author Input */}
-            <div>
-              {isAuthorEditing ? (
-                <input
-                  type="text"
-                  value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="Author"
-                  onBlur={() => setisAuthorEditing(false)}
-                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
-                  autoFocus
-                  aria-label="Edit Author"
-                />
-              ) : (
-                <div
-                  onClick={() => setisAuthorEditing(true)}
-                  className="cursor-text text-gray-700"
-                >
-                  {author || "Author"}
+          <form>
+            <div className=" flex flex-row justify-between">
+              <div className="flex flex-col gap-4">
+                {/* Author Input */}
+                <div>
+                  {isAuthorEditing ? (
+                    <input
+                      type="text"
+                      value={author}
+                      onChange={(e) => setAuthor(e.target.value)}
+                      placeholder="Author"
+                      onBlur={() => setisAuthorEditing(false)}
+                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
+                      autoFocus
+                      aria-label="Edit Author"
+                    />
+                  ) : (
+                    <div
+                      onClick={() => setisAuthorEditing(true)}
+                      className="cursor-text text-gray-700"
+                    >
+                      {author || "Author"}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            {/* Title Input */}
-            <div>
-              {isTitleEditing ? (
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
-                  placeholder="Title"
-                  onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
-                  className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-700"
-                  autoFocus
-                  aria-label="Edit Title"
-                />
-              ) : (
-                <div
-                  className="cursor-text text-2xl font-bold text-gray-700"
-                  onClick={() => setisTitleEditing(true)} //starts editing mode when clicked
-                >
-                  {/* shows either the current title or the placeholder */}
-                  {title || "Title"}
+                {/* Title Input */}
+                <div>
+                  {isTitleEditing ? (
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
+                      placeholder="Title"
+                      onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
+                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-700"
+                      autoFocus
+                      aria-label="Edit Title"
+                    />
+                  ) : (
+                    <div
+                      className="cursor-text text-2xl font-bold text-gray-700"
+                      onClick={() => setisTitleEditing(true)} //starts editing mode when clicked
+                    >
+                      {/* shows either the current title or the placeholder */}
+                      {title || "Title"}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Description Input */}
-            <div>
-              {isDescriptionEditing ? (
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Write Your Story...."
-                  onBlur={() => setisDescriptionEditing(false)}
-                  className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-700 resize-none"
-                  autoFocus
-                  aria-label="Edit Description"
-                ></textarea>
-              ) : (
-                <div
-                  onClick={() => setisDescriptionEditing(true)}
-                  className="cursor-text text-gray-700 min-h-[100px]"
-                >
-                  {description || "Description"}
+                {/* Description Input */}
+                <div>
+                  {isDescriptionEditing ? (
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Write Your Story...."
+                      onBlur={() => setisDescriptionEditing(false)}
+                      className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-700 resize-none"
+                      autoFocus
+                      aria-label="Edit Description"
+                    ></textarea>
+                  ) : (
+                    <div
+                      onClick={() => setisDescriptionEditing(true)}
+                      className="cursor-text text-gray-700 min-h-[100px]"
+                    >
+                      {description || "Description"}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-
-            {/* Image Input */}
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-                ref={fileInputRef}
-              />
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="cursor-pointer text-gray-700"
-              >
-                {image ? (
-                  <Image
-                    src={image || "/placeholder.svg"}
-                    alt="Blog Image"
-                    width={200}
-                    height={200}
-                    className="rounded mt-2"
+              </div>
+              {/* Image Input */}
+              <div className="mt-5">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  ref={fileInputRef}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="cursor-pointer text-gray-700"
+                >
+                  {image ? (
+                    <Image
+                      src={image || "/placeholder.svg"}
+                      alt="Blog Image"
+                      width={200}
+                      height={200}
+                      className="rounded mt-2"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="text-sm font-medium">
+                        Add an image to your post
+                      </div>
+                      <button className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors">
+                        Select Image
+                      </button>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    accept="image/*"
+                    className="hidden"
                   />
-                ) : (
-                  "Click to upload image"
-                )}
+                </div>
               </div>
             </div>
           </form>
