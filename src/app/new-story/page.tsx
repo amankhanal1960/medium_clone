@@ -1,13 +1,14 @@
 "use client";
-import React, { useState, useRef } from "react";
+import type React from "react";
+import { useState, useRef } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
-import PopUp from "@/src/components/navbar";
+import { PopUp } from "@/src/components/navbar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const story = () => {
+const Story = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,15 +33,15 @@ const story = () => {
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
   const [isAuthorEditing, setisAuthorEditing] = useState(false);
 
-  const handleImageChange = (event: any) => {
-    const file = event.target.files[0];
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       setImageFile(file);
       setImage(URL.createObjectURL(file));
     }
   };
 
-  const handlePublish = async (event: any) => {
+  const handlePublish = async (event: React.FormEvent) => {
     event.preventDefault();
     const currentDate = new Date().toLocaleDateString();
 
@@ -205,7 +206,7 @@ const story = () => {
               >
                 {image ? (
                   <Image
-                    src={image || "/assects/placeholder.svg"}
+                    src={image || "/placeholder.svg"}
                     alt="Blog Image"
                     width={200}
                     height={200}
@@ -223,4 +224,4 @@ const story = () => {
   );
 };
 
-export default story;
+export default Story;

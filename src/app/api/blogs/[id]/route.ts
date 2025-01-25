@@ -1,13 +1,13 @@
-import { NextResponse } from "next/server"; //used to send structured HTTP request in Next.js API routes
+import { type NextRequest, NextResponse } from "next/server";
 import connect from "@/lib/db";
 import Blog from "@/lib/modals/blog";
 
-export const PUT = async (
-  request: Request,
+export async function PUT(
+  request: NextRequest,
   { params }: { params: { id: string } }
-) => {
+) {
   try {
-    const { id } = params;
+    const id = params.id;
     const body = await request.json();
 
     if (!body.title || !body.description || !body.image) {
@@ -28,9 +28,11 @@ export const PUT = async (
       },
       { new: true } //ensures the updated document is returned
     );
+
     if (!updatedBlog) {
       return NextResponse.json({ message: "Blog not found." }, { status: 404 });
     }
+
     return NextResponse.json(
       { message: "Blog updated successfully.", blog: updatedBlog },
       { status: 200 }
@@ -42,15 +44,14 @@ export const PUT = async (
       { status: 500 }
     );
   }
-};
+}
 
-//Delete Blog
-export const DELETE = async (
-  req: Request,
+export async function DELETE(
+  request: NextRequest,
   { params }: { params: { id: string } }
-) => {
+) {
   try {
-    const { id } = params;
+    const id = params.id;
 
     if (!id) {
       console.error("Blog ID is missing in the request parameters.");
@@ -60,11 +61,9 @@ export const DELETE = async (
       );
     }
 
-    // Connect to the database
     await connect();
     console.log(`Attempting to delete blog with id: ${id}`);
 
-    // Find and delete the blog by ID
     const deletedBlog = await Blog.findByIdAndDelete(id);
 
     if (!deletedBlog) {
@@ -82,4 +81,4 @@ export const DELETE = async (
       { status: 500 }
     );
   }
-};
+}

@@ -52,25 +52,62 @@ const Blog = () => {
   }, []);
 
   // Delete blog
-  const removeBlog = async (id: string) => {
+  // const removeBlog = async (id: string) => {
+  //   const confirmed = confirm("Are you sure you want to remove?");
+  //   if (confirmed) {
+  //     try {
+  //       const res = await axios.delete(`http://localhost:3000/api/blogs/${id}`);
+
+  //       if (res.status == 200) {
+  //         toast.success("Blog deleted successfully!!");
+
+  //         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+  //       } else {
+  //         toast.error("Failed to delete blog!!");
+  //       }
+  //     } catch (error: any) {
+  //       console.error("Error deleting blog:", error.message);
+  //       toast.error(
+  //         "An error occurred while deleting the blog. Please try again."
+  //       );
+  //     }
+  //   }
+  // };
+
+  //Rewriting the code for the delete with promise,resolve and reject
+  const removeBlog = (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
-      try {
-        const res = await axios.delete(`http://localhost:3000/api/blogs/${id}`);
+      //Return a new promise
+      return new Promise((resolve, reject) => {
+        //Perform the axios DELETE request
+        axios
+          .delete(`http://localhost:3000/api/blogs/${id}`)
 
-        if (res.status == 200) {
-          toast.success("Blog deleted successfully!!");
-
-          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
-        } else {
-          toast.error("Failed to delete blog!!");
-        }
-      } catch (error: any) {
-        console.error("Error deleting blog:", error.message);
-        toast.error(
-          "An error occurred while deleting the blog. Please try again."
-        );
-      }
+          .then((res) => {
+            if (res.status === 200) {
+              //Handle sucess. Resolve the promise
+              toast.success("Blog deleted successfully!!");
+              setBlogs((prevBlogs) =>
+                prevBlogs.filter((blog) => blog.id !== id)
+              );
+              Promise.resolve("Sucess in deleting the blog");
+            } else {
+              toast.error("Failed to delete the blog!!");
+              reject(new Error("Failed to delete the blog"));
+            }
+          })
+          .catch((error) => {
+            //Handle request error, reject the promise
+            console.error("Error deleting blog:", error.message);
+            toast.error(
+              "An error occurred while deleting the blog. Please try again."
+            );
+            reject(error); //pass the error to the caller
+          });
+      });
+    } else {
+      return Promise.resolve("Blog deletion cancelled");
     }
   };
 
