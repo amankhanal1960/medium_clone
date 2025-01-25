@@ -100,7 +100,7 @@ const Story = () => {
           <div className="flex gap-6 items-center text-gray-400">
             <button
               onClick={handlePublish}
-              className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200"
+              className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200 cursor-pointer"
               disabled={!title || !description || !author || !image}
             >
               Publish
@@ -124,7 +124,7 @@ const Story = () => {
         <div className="mt-6 max-w-[800px] mx-auto px-6">
           <form>
             <div className=" flex flex-row justify-between">
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-6gi">
                 {/* Author Input */}
                 <div>
                   {isAuthorEditing ? (
@@ -219,9 +219,9 @@ const Story = () => {
                       <div className="text-sm font-medium">
                         Add an image to your post
                       </div>
-                      <button className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors">
+                      <div className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors">
                         Select Image
-                      </button>
+                      </div>
                     </div>
                   )}
                   <input
