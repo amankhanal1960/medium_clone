@@ -6,8 +6,8 @@ const BlogCardSkeleton = () => {
       <div className="flex justify-around items-end">
         {/* Blog Details Skeleton */}
         <div className="flex-grow pr-4">
-          <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
-          <div className="h-6 bg-gray-400 rounded w-3/4 mb-2"></div>
+          <div className="h-4 bg-gray-400 rounded w-1/4 mb-2"></div>
+          <div className="h-6 bg-gray-500 rounded w-3/4 mb-2"></div>
           <div className="h-4 bg-gray-300 rounded w-1/2 mb-4"></div>
           <div className="flex items-center mt-4 text-gray-400">
             <div className="h-4 bg-gray-300 rounded w-1/5"></div>

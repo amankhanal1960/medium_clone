@@ -202,10 +202,7 @@ const Story = () => {
                   className="hidden"
                   ref={fileInputRef}
                 />
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="cursor-pointer text-gray-700"
-                >
+                <div className="cursor-pointer text-gray-700">
                   {image ? (
                     <Image
                       src={image || "/placeholder.svg"}
@@ -219,9 +216,15 @@ const Story = () => {
                       <div className="text-sm font-medium">
                         Add an image to your post
                       </div>
-                      <div className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          fileInputRef.current?.click();
+                        }}
+                        className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors"
+                      >
                         Select Image
-                      </div>
+                      </button>
                     </div>
                   )}
                   <input

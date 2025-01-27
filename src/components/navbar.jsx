@@ -88,7 +88,7 @@ const Navbar = () => {
                 Write
               </p>
             </div>
-            <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer  hover:text-gray-900"></i>
+            <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer hover:text-gray-900"></i>
             <Image
               src="/assects/me1.jpg"
               alt="Placeholder Image"

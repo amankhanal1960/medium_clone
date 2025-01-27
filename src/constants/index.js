@@ -26,7 +26,7 @@ export const smallScreenLinks = [
 export const recommendations = [
   { href: "/foryou", label: "For you" },
   { href: "/", label: "Following" },
-  { href: "/", label: "Sexuality" },
+  { href: "/", label: "Spanish" },
   { href: "/", label: "Women" },
   { href: "/", label: "Apple" },
   { href: "/", label: "Marketing" },
