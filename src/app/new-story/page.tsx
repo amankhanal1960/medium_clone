@@ -124,7 +124,7 @@ const Story = () => {
         <div className="mt-6 max-w-[800px] mx-auto px-6">
           <form>
             <div className=" flex flex-row justify-between">
-              <div className="flex flex-col gap-6gi">
+              <div className="flex flex-col gap-6">
                 {/* Author Input */}
                 <div>
                   {isAuthorEditing ? (
