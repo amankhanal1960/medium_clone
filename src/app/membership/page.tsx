@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/src/components/navbar";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +8,7 @@ import { recommendations } from "@/src/constants/index";
 import axios from "axios";
 import BlogCardSkeleton from "./blogCardSkeleton";
 import { toast } from "react-toastify";
+import NetworkError from "@/src/components/networkError";
 
 interface Blog {
   id: string;
@@ -24,13 +25,15 @@ interface Blog {
 const Blog = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch blogs on component mount
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/blogs");
-        // const data = response.data;
+        const response = await axios.get("http://localhost:3000/api/blogs", {
+          timeout: 15000,
+        });
         const { data } = response;
 
         if (data.blogs && data.blogs.length > 0) {
@@ -42,7 +45,18 @@ const Blog = () => {
           setBlogs(formattedBlogs);
         }
       } catch (error: any) {
-        console.error("Error fetching blogs: " + error.message);
+        console.error("Error fetching blogs:", error);
+        if (axios.isAxiosError(error)) {
+          if (error.code === "ECONNABORTED") {
+            setError("timeout");
+          } else if (!error.response) {
+            setError("network");
+          } else {
+            setError("server");
+          }
+        } else {
+          setError("unknown");
+        }
       } finally {
         setLoading(false);
       }
@@ -110,6 +124,15 @@ const Blog = () => {
       return Promise.resolve("Blog deletion cancelled");
     }
   };
+
+  if (error) {
+    return (
+      <NetworkError
+        errorType={error}
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
 
   return (
     <div>
@@ -179,7 +202,7 @@ const Blog = () => {
                   {/* Blog Image */}
                   <div className="flex flex-col items-center justify-center">
                     <Image
-                      src={blog.image}
+                      src={blog.image || "/placeholder.svg"}
                       alt="Blog Image"
                       width={176}
                       height={112}
