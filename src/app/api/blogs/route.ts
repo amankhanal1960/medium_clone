@@ -7,7 +7,7 @@ export async function GET() {
   try {
     await connect();
 
-    const blogs = await Blog.find({}).lean();
+    const blogs = await Blog.find({});
 
     return NextResponse.json({ blogs }, { status: 200 });
   } catch (error: any) {

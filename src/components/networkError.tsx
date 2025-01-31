@@ -24,7 +24,7 @@ const NetworkError: React.FC<NetworkErrorProps> = ({ errorType, onRetry }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-      <h1 className="text-4xl font-bold mb-4 text-black">Error</h1>
+      <h1 className="text-4xl font-bold mb-4 text-black">Error !!</h1>
       <p className="text-xl mb-8  text-black">{errorMessage}</p>
       <button
         onClick={onRetry}
