@@ -2,7 +2,7 @@ import type React from "react";
 
 interface NetworkErrorProps {
   errorType: string;
-  onRetry: () => void;
+  onRetry: () => Promise<void>;
 }
 
 const NetworkError: React.FC<NetworkErrorProps> = ({ errorType, onRetry }) => {
@@ -23,12 +23,12 @@ const NetworkError: React.FC<NetworkErrorProps> = ({ errorType, onRetry }) => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-4xl font-bold mb-4 text-black">Error !!</h1>
-      <p className="text-xl mb-8  text-black">{errorMessage}</p>
+      <p className="text-xl mb-8 text-black">{errorMessage}</p>
       <button
         onClick={onRetry}
-        className="bg-blue-400 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
       >
         Try Again
       </button>
