@@ -7,7 +7,6 @@ const handler = NextAuth({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    // Keep your existing providers here
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {

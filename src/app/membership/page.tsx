@@ -32,75 +32,48 @@ const Blog = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch blogs on component mount
-  // useEffect(() => {
-  //   if (status === "unauthenticated") {
-  //     router.push("/login");
-  //   } else if (status === "authenticated") {
-  //     router.push("/membership");
-  //     fetchBlogs();
-  //   }
-  // }, [status, router]);
-
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/blogs", {
-          timeout: 15000,
-        });
-        const { data } = response;
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else if (status === "authenticated") {
+      router.push("/membership");
+      fetchBlogs();
+    }
+  }, [status, router]);
 
-        if (data.blogs && data.blogs.length > 0) {
-          // Map _id to id for frontend consistency
-          const formattedBlogs = data.blogs.map((blog: any) => ({
-            ...blog,
-            id: blog._id, // Map MongoDB _id to id
-          }));
-          setBlogs(formattedBlogs);
-        }
-      } catch (error: any) {
-        console.error("Error fetching blogs:", error);
-        if (axios.isAxiosError(error)) {
-          if (error.code === "ECONNABORTED") {
-            setError("timeout");
-          } else if (!error.response) {
-            setError("network");
-          } else {
-            setError("server");
-          }
-        } else {
-          setError("unknown");
-        }
-      } finally {
-        setLoading(false);
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/blogs", {
+        timeout: 15000,
+      });
+      const { data } = response;
+
+      if (data.blogs && data.blogs.length > 0) {
+        // Map _id to id for frontend consistency
+        const formattedBlogs = data.blogs.map((blog: any) => ({
+          ...blog,
+          id: blog._id, // Map MongoDB _id to id
+        }));
+        setBlogs(formattedBlogs);
       }
-    };
-
-    fetchBlogs();
-  }, []);
-  // Delete blog
-  // const removeBlog = async (id: string) => {
-  //   const confirmed = confirm("Are you sure you want to remove?");
-  //   if (confirmed) {
-  //     try {
-  //       const res = await axios.delete(http://localhost:3000/api/blogs/${id});
-  //
-  //       if (res.status == 200) {
-  //         toast.success("Blog deleted successfully!!");
-  //
-  //         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
-  //       } else {
-  //         toast.error("Failed to delete blog!!");
-  //       }
-  //     } catch (error: any) {
-  //       console.error("Error deleting blog:", error.message);
-  //       toast.error(
-  //         "An error occurred while deleting the blog. Please try again."
-  //       );
-  //     }
-  //   }
-  // };
-
-  //Rewriting the code for the delete with promise,resolve and reject
+    } catch (error: any) {
+      console.error("Error fetching blogs:", error);
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          setError("timeout");
+        } else if (!error.response) {
+          setError("network");
+        } else {
+          setError("server");
+        }
+      } else {
+        setError("unknown");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  //writing the code for the delete with promise,resolve and reject
   const removeBlog = (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
