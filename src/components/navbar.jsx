@@ -4,6 +4,11 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+
+const handleLogout = async () => {
+  await signOut({ callbackUrl: "/login" }); // Redirect to login after logout
+};
 
 export const PopUp = () => (
   <div className="fixed top-14 right-0 bg-white shadow-lg border border-gray-200 rounded-md p-4 w-72">
@@ -37,6 +42,13 @@ export const PopUp = () => (
           <i className="fa-solid fa-chart-simple"></i>
           Stats
         </Link>
+        <p
+          onClick={handleLogout}
+          className="flex items-center gap-4 text-gray-600  cursor-pointer hover:text-gray-900 transition"
+        >
+          <i className="fa-solid fa-right-from-bracket"></i>
+          Log Out
+        </p>
       </ul>
     </div>
   </div>

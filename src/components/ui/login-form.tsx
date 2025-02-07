@@ -1,12 +1,15 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -14,10 +17,22 @@ function LoginForm() {
       setError("Please enter both email and password.");
       return;
     }
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email, // NextAuth expects `username`, not `email`
+      password,
+    });
+
+    if (result?.error) {
+      setError("Invalid email or password");
+    } else {
+      router.push("/membership"); // Redirect after successful login
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-customBackground">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center text-black">
           Login
@@ -75,4 +90,5 @@ function LoginForm() {
     </div>
   );
 }
+
 export default LoginForm;

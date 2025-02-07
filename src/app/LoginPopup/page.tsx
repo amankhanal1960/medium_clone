@@ -1,29 +1,25 @@
 "use client";
 
 import type React from "react";
-import { useGoogleLogin } from "@react-oauth/google";
+import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 
 interface LoginPopupProps {
   onClose: () => void;
 }
 
-//this declares a functional React component named LoginPopup using typescript
-//({ onClose }) this props object is destructured to extract the onClose function
 const LoginPopup = ({ onClose }: LoginPopupProps) => {
-  //useGoogleLogin hook to handle the login process
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
+
   useEffect(() => {
     setIsRegisterPopupOpen(true);
     return () => setIsRegisterPopupOpen(false);
   }, []);
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log(tokenResponse);
-      // call backend api
-    },
-  });
+  // Use NextAuth signIn for Google OAuth
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/membership" }); // Redirect to /membership after login
+  };
 
   return (
     <div
@@ -36,8 +32,8 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
       <div
         className={`bg-white shadow-lg rounded-lg md:w-[670px] w-[600px] md:p-[38px] pt-[55px] md:h-[95%] h-[100%] relative transition-transform duration-300 ease-in-out ${
           isRegisterPopupOpen
-            ? "transform translate-y-0 scale-x-100 scale-y-100 opacity-100" // Popup fully visible and scaled to 100%
-            : "transform translate-y-[10%] scale-x-[0.9] scale-y-[0.9] opacity-0" // Starts from 70% width and height, moved from bottom
+            ? "transform translate-y-0 scale-x-100 scale-y-100 opacity-100"
+            : "transform translate-y-[10%] scale-x-[0.9] scale-y-[0.9] opacity-0"
         }`}
       >
         <button
@@ -54,11 +50,11 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
         <div className="flex flex-col gap-3 items-center justify-center">
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
-            onClick={() => login()}
+            onClick={handleGoogleSignIn} // ✅ Use NextAuth for Google login
           >
             <img
               src="/assects/google.png"
-              alt=""
+              alt="Google Logo"
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with Google</span>
@@ -67,7 +63,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
               src="/assects/facebook.png"
-              alt=""
+              alt="Facebook Logo"
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with Facebook</span>
@@ -76,7 +72,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
               src="/assects/apple-logo.png"
-              alt=""
+              alt="Apple Logo"
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with Apple</span>
@@ -85,7 +81,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
               src="/assects/twitter.png"
-              alt=""
+              alt="X Logo"
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with X</span>
@@ -94,7 +90,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
             <img
               src="/assects/mail.png"
-              alt=""
+              alt="Mail Logo"
               className="absolute left-3 w-4 h-4"
             />
             <span className="flex-grow text-center">Sign in with email</span>
