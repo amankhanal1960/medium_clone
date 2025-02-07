@@ -3,6 +3,7 @@
 import type React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface RegisterPopupProps {
   onClose: () => void;
@@ -12,6 +13,8 @@ interface RegisterPopupProps {
 //this declares a functional React component named LoginPopup using typescript
 //({ onClose }) this props object is destructured to extract the onClose function
 const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
+  const router = useRouter();
+
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
 
   useEffect(() => {
@@ -77,7 +80,10 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
             <span className="flex-grow text-center">Sign in with Facebook</span>
           </button>
 
-          <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
+          <button
+            className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
+            onClick={() => router.push("/membership")}
+          >
             <img
               src="/assects/mail.png"
               alt="Mail logo"
