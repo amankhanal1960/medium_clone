@@ -6,8 +6,12 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // Ensure the password is required
+    password: {
+      type: String,
+      required: false,
+    },
     image: { type: String },
+    oauthProvider: { type: String },
     bio: { type: String },
   },
   {

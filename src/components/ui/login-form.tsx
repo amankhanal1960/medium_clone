@@ -20,7 +20,7 @@ function LoginForm() {
 
     const result = await signIn("credentials", {
       redirect: false,
-      email, // NextAuth expects `username`, not `email`
+      email,
       password,
     });
 
@@ -32,7 +32,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-customBackground">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center text-black">
           Login
@@ -41,7 +41,7 @@ function LoginForm() {
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-4 text-black">
             <label
               htmlFor="email"
               className="block text-gray-700 font-medium mb-2"
@@ -69,7 +69,7 @@ function LoginForm() {
             <input
               type="password"
               id="password"
-              className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border text-black border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
