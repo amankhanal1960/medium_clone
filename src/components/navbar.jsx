@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const handleLogout = async () => {
   await signOut({ callbackUrl: "/login" }); // Redirect to login after logout
@@ -69,6 +70,8 @@ const Navbar = () => {
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
+  const { data: session } = useSession(); // Get user session
+  const user = session?.user; // Extract user details
 
   return (
     <>
@@ -102,7 +105,7 @@ const Navbar = () => {
             </div>
             <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer hover:text-gray-900"></i>
             <Image
-              src="/assects/me1.jpg"
+              src={user?.image || "https://picsum.photos/200/300"}
               alt="Placeholder Image"
               width={600}
               height={600}

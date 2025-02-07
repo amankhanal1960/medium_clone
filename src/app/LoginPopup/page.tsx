@@ -3,12 +3,14 @@
 import type React from "react";
 import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface LoginPopupProps {
   onClose: () => void;
 }
 
 const LoginPopup = ({ onClose }: LoginPopupProps) => {
+  const router = useRouter();
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
 
   useEffect(() => {
@@ -87,7 +89,10 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
             <span className="flex-grow text-center">Sign in with X</span>
           </button>
 
-          <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
+          <button
+            className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
+            onClick={() => router.push("/login")}
+          >
             <img
               src="/assects/mail.png"
               alt="Mail Logo"

@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useGoogleLogin } from "@react-oauth/google";
+import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -22,12 +22,10 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
     return () => setIsRegisterPopupOpen(false);
   }, []);
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log(tokenResponse);
-      // call backend api
-    },
-  });
+  // Use NextAuth signIn for Google OAuth
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/membership" }); // Redirect to /membership after login
+  };
 
   return (
     <div
@@ -61,7 +59,7 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
           {/* Social buttons */}
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
-            onClick={() => login()}
+            onClick={handleGoogleSignIn}
           >
             <img
               src="/assects/google.png"
@@ -82,7 +80,7 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
 
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
-            onClick={() => router.push("/membership")}
+            onClick={() => router.push("/login")}
           >
             <img
               src="/assects/mail.png"

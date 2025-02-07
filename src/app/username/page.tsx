@@ -1,32 +1,36 @@
 "use client";
 import React, { useState } from "react";
-
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/src/components/navbar";
+import { useSession } from "next-auth/react";
 
 const Profile = () => {
+  const { data: session } = useSession(); // Get user session
+  const user = session?.user; // Extract user details
+
   const [activeSection, setActiveSection] = useState("home");
 
   const ReadingList = () => (
-    <div className="border rounded-lg  xl:mr-32 lg:mr-20 flex gap-[2px]">
+    <div className="border rounded-lg xl:mr-32 lg:mr-20 flex gap-[2px]">
       <div className="bg-gray-50 w-3/5 p-6">
         <div className="flex items-center mb-4 gap-2">
           <Image
-            src="/assects/me1.jpg"
-            alt="Placeholder Image"
+            src={user?.image || "https://picsum.photos/200/300"} // Use user image or default
+            alt="User Image"
             width={600}
             height={600}
             priority
-            className="w-6 h-6 rounded-full border-gray-300 cursor-pointer  hover:opacity-55 transition"
+            className="w-6 h-6 rounded-full border-gray-300 cursor-pointer hover:opacity-55 transition"
           />
-          <h3 className="text-base text-black font-semibold">Amankhanal</h3>
+          <h3 className="text-base text-black font-semibold">
+            {user?.name || "Guest"}
+          </h3>
         </div>
         <h4 className="text-xl font-bold text-black">Reading list</h4>
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-center gap-2">
             <p className="text-gray-500 mt-2 text-sm">No stories</p>
-            {/* <i className="fa-solid fa-lock text-gray-600 text-xs"></i> */}
           </div>
           <i className="fa-solid fa-ellipsis text-black"></i>
         </div>
@@ -38,14 +42,13 @@ const Profile = () => {
   );
 
   const AboutSection = () => (
-    <div className=" flex flex-col items-center justify-center xl:mr-32 lg:mr-20 bg-gray-50 p-6">
+    <div className="flex flex-col items-center justify-center xl:mr-32 lg:mr-20 bg-gray-50 p-6">
       <h4 className="text-lg font-bold text-black mt-12">
         Tell the world about yourself
       </h4>
       <p className="text-gray-500 mt-6 text-xs text-center sm:px-24">
         Here’s where you can share more about yourself: your history, work
-        experience, accomplishments, interests, dreams, and more. You can even
-        add images and use rich text to personalize your bio.
+        experience, accomplishments, interests, dreams, and more.
       </p>
       <button className="border py-2 px-4 mt-5 mb-12 rounded-3xl border-black bg-white text-black text-sm">
         Get started
@@ -60,11 +63,11 @@ const Profile = () => {
       </div>
       <div className="flex px-6 lg:flex-row flex-col xl:ml-44 lg:ml-28 flex-grow">
         {/* Left Section */}
-        <div className="lg:w-3/5  mt-14">
+        <div className="lg:w-3/5 mt-14">
           <div className="mb-11">
             <div className="flex justify-between items-center xl:mr-32 lg:mr-20 mb-4">
               <h1 className="text-4xl font-bold mb-4 text-black">
-                Aman Khanal
+                {user?.name || "Guest User"}
               </h1>
               <i className="fa-solid fa-ellipsis text-black"></i>
             </div>
@@ -98,15 +101,15 @@ const Profile = () => {
           <div className="flex flex-grow flex-col justify-between p-10">
             <div>
               <Image
-                src="/assects/me1.jpg"
-                alt="Placeholder Image"
+                src={user?.image || "https://picsum.photos/200/300"}
+                alt="User Image"
                 width={600}
                 height={600}
                 priority
-                className="w-20 h-20 rounded-full border-gray-300 cursor-pointer  hover:opacity-55 transition mb-3"
+                className="w-20 h-20 rounded-full border-gray-300 cursor-pointer hover:opacity-55 transition mb-3"
               />
-              <h3 className=" text-lg font-semibold mb-5 text-black">
-                Amankhanal
+              <h3 className="text-lg font-semibold mb-5 text-black">
+                {user?.name || "Guest"}
               </h3>
               <button className="block text-sm text-green-600 font-medium">
                 Edit profile
@@ -117,7 +120,7 @@ const Profile = () => {
                 <Link href={"/"}>Help</Link>
                 <Link href={"/"}>Status</Link>
                 <Link href={"/"}>About</Link>
-                <Link href={"/"}>Carrers</Link>
+                <Link href={"/"}>Careers</Link>
                 <Link href={"/"}>Press</Link>
                 <Link href={"/"}>Blog</Link>
                 <Link href={"/"}>Privacy</Link>
