@@ -22,8 +22,6 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
-  console.log("Password before hashing:", this.password); // Log password
-
   if (!this.password || this.password.trim() === "") {
     return next(new Error("Password is required")); // Handle if password is not provided
   }
@@ -33,7 +31,6 @@ userSchema.pre("save", async function (next) {
     if (typeof this.password === "string") {
       this.password = await bcrypt.hash(this.password, salt); // Hash password
     }
-    console.log("Password after hashing:", this.password); // Log password after hashing
     next();
   } catch (error) {
     console.error("Error during password hashing:", error);

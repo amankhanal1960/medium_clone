@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import connect from "@/lib/db"; // Assuming connect is a utility to connect to MongoDB
+import connect from "@/lib/db"; // MongoDB connection utility
 import User from "@/lib/modals/user";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const { name, email, password, image, bio } = body;
 
     // Validate required fields
-    if (!body.name || !body.email || !body.password) {
+    if (!name || !email || !password) {
       return NextResponse.json(
         { message: "Name, email, and password are required." },
         { status: 400 }
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
     await connect(); // Connect to MongoDB
 
     // Check if the user already exists
-    const existingUser = await User.findOne({ email: body.email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
         { message: "User with this email already exists." },
@@ -25,16 +26,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create a new user
-    const newUser = new User({
-      name: body.name,
-      email: body.email,
-      password: body.password, // Plain password (will be hashed before saving)
-      image: body.image,
-      bio: body.bio,
-    });
-
-    await newUser.save(); // Save the user to the database
+    // Create a new user (password will be hashed in user.ts)
+    const newUser = new User({ name, email, password, image, bio });
+    await newUser.save();
 
     return NextResponse.json(
       { message: "User created successfully.", user: newUser },
@@ -53,17 +47,16 @@ export async function GET(request: NextRequest) {
   try {
     await connect(); // Ensure DB connection
 
-    // Get the query parameters for email or id
+    // Get the query parameters
     const { searchParams } = new URL(request.url);
     const email = searchParams.get("email");
     const id = searchParams.get("id");
 
     let user;
-
     if (email) {
-      user = await User.findOne({ email });
+      user = await User.findOne({ email }).select("-password"); // Exclude password from response
     } else if (id) {
-      user = await User.findById(id);
+      user = await User.findById(id).select("-password");
     } else {
       return NextResponse.json(
         {

@@ -73,6 +73,11 @@ const Navbar = () => {
   const { data: session } = useSession(); // Get user session
   const user = session?.user; // Extract user details
 
+  // Error states for images
+  const [navbarImageError, setNavbarImageError] = useState(false);
+
+  const defaultImageUrl = "/User.png";
+
   return (
     <>
       <div>
@@ -105,13 +110,16 @@ const Navbar = () => {
             </div>
             <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer hover:text-gray-900"></i>
             <Image
-              src={user?.image || "https://picsum.photos/200/300"}
-              alt="Placeholder Image"
+              src={
+                navbarImageError || !user?.image ? defaultImageUrl : user.image
+              }
+              alt="User Image"
               width={600}
               height={600}
               priority
               className="w-8 h-8 rounded-full border-gray-300 cursor-pointer  hover:opacity-55 transition"
               onClick={togglePopup}
+              onError={() => setNavbarImageError(true)}
             />
           </div>
         </div>

@@ -80,7 +80,7 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
 
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
-            onClick={() => router.push("/login")}
+            onClick={() => router.push("/signUp")}
           >
             <img
               src="/assects/mail.png"

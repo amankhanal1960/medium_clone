@@ -3,7 +3,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-function LoginForm() {
+function SignupForm() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,10 +14,12 @@ function LoginForm() {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please enter both email and password.");
+    if (!name || !email || !password) {
+      setError("Please fill in all fields.");
       return;
     }
+
+    // Perform signup logic here, e.g., API call to register the user
 
     const result = await signIn("credentials", {
       redirect: false,
@@ -25,26 +28,44 @@ function LoginForm() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password");
+      setError("Failed to create an account.");
     } else {
-      router.push("/membership"); // Redirect after successful login
+      router.push("/membership"); // Redirect to membership page after successful signup
     }
   };
 
-  const handleSignupRedirect = () => {
-    router.push("/signUp"); // Redirect to signup page
+  const handleLoginRedirect = () => {
+    router.push("/login"); // Redirect to login page
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-customBackground">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-bold mb-4 text-center text-black">
-          Login
+          Sign Up
         </h2>
 
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>
+          <div className="mb-4 text-black">
+            <label
+              htmlFor="name"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="mb-4 text-black">
             <label
               htmlFor="email"
@@ -63,7 +84,7 @@ function LoginForm() {
             />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 text-black">
             <label
               htmlFor="password"
               className="block text-gray-700 font-medium mb-2"
@@ -86,19 +107,19 @@ function LoginForm() {
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
             >
-              Log In
+              Sign Up
             </button>
           </div>
         </form>
 
         <div className="mt-4 text-center text-black">
           <p>
-            Don't have an account?{" "}
+            Already have an account?{" "}
             <button
-              onClick={handleSignupRedirect}
+              onClick={handleLoginRedirect}
               className="text-blue-500 hover:text-blue-700"
             >
-              Sign Up
+              Log in
             </button>
           </p>
         </div>
@@ -107,4 +128,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default SignupForm;

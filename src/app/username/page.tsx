@@ -1,27 +1,37 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/src/components/navbar";
 import { useSession } from "next-auth/react";
 
 const Profile = () => {
-  const { data: session } = useSession(); // Get user session
-  const user = session?.user; // Extract user details
-
+  const { data: session } = useSession();
+  const user = session?.user;
   const [activeSection, setActiveSection] = useState("home");
+
+  // Error states for images
+  const [readingListImageError, setReadingListImageError] = useState(false);
+  const [sidebarImageError, setSidebarImageError] = useState(false);
+
+  const defaultImageUrl = "/User.png";
 
   const ReadingList = () => (
     <div className="border rounded-lg xl:mr-32 lg:mr-20 flex gap-[2px]">
       <div className="bg-gray-50 w-3/5 p-6">
         <div className="flex items-center mb-4 gap-2">
           <Image
-            src={user?.image || "https://picsum.photos/200/300"} // Use user image or default
+            src={
+              readingListImageError || !user?.image
+                ? defaultImageUrl
+                : user.image
+            }
             alt="User Image"
-            width={600}
-            height={600}
+            width={24}
+            height={24}
             priority
             className="w-6 h-6 rounded-full border-gray-300 cursor-pointer hover:opacity-55 transition"
+            onError={() => setReadingListImageError(true)}
           />
           <h3 className="text-base text-black font-semibold">
             {user?.name || "Guest"}
@@ -47,7 +57,7 @@ const Profile = () => {
         Tell the world about yourself
       </h4>
       <p className="text-gray-500 mt-6 text-xs text-center sm:px-24">
-        Here’s where you can share more about yourself: your history, work
+        Here's where you can share more about yourself: your history, work
         experience, accomplishments, interests, dreams, and more.
       </p>
       <button className="border py-2 px-4 mt-5 mb-12 rounded-3xl border-black bg-white text-black text-sm">
@@ -101,12 +111,17 @@ const Profile = () => {
           <div className="flex flex-grow flex-col justify-between p-10">
             <div>
               <Image
-                src={user?.image || "https://picsum.photos/200/300"}
+                src={
+                  sidebarImageError || !user?.image
+                    ? defaultImageUrl
+                    : user.image
+                }
                 alt="User Image"
-                width={600}
-                height={600}
+                width={80}
+                height={80}
                 priority
                 className="w-20 h-20 rounded-full border-gray-300 cursor-pointer hover:opacity-55 transition mb-3"
+                onError={() => setSidebarImageError(true)}
               />
               <h3 className="text-lg font-semibold mb-5 text-black">
                 {user?.name || "Guest"}

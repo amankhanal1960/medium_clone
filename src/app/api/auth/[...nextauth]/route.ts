@@ -61,33 +61,23 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) return null;
 
-        await connect(); // Ensure DB connection
+        await connect();
 
-        let user = await User.findOne({ email: credentials.email });
+        // Check if the user exists
+        const user = await User.findOne({ email: credentials.email });
 
-        // If user doesn't exist, create a new one with a dummy name and image
-        if (!user) {
-          // Create a new user with a dummy name and image
-          user = new User({
-            name: "New User", // Dummy name
-            email: credentials.email,
-            image: "https://www.example.com/dummy-image.jpg", // Dummy image
-            password: credentials.password,
-          });
+        // If user doesn't exist, return null (don't create a new user)
+        if (!user) return null;
 
-          await user.save(); // Save the new user to DB
-        } else {
-          // Check if the password is correct for an existing user
+        // Check password validity
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
 
-          let isPasswordValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
+        if (!isPasswordValid) return null;
 
-          if (!isPasswordValid) return null;
-        }
-
-        // Return the user information if successful
+        // Return user data without password
         return {
           id: user._id.toString(),
           name: user.name,
@@ -103,14 +93,14 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account }) {
       if (account?.provider === "google") {
-        console.log("Google OAuth Login Successful", profile);
+        // You can log the profile or perform other actions after Google sign-in
       }
       return true;
     },
 
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }) {
       return `${baseUrl}/membership`; // Redirect to membership page after sign-in
     },
 
