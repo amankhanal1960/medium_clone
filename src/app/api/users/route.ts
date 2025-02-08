@@ -1,6 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import connect from "@/lib/db"; // MongoDB connection utility
+import { type NextRequest, NextResponse } from "next/server";
+import connect from "@/lib/db";
 import User from "@/lib/modals/user";
+import bcrypt from "bcrypt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,12 +27,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create a new user (password will be hashed in user.ts)
-    const newUser = new User({ name, email, password, image, bio });
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      image,
+      bio,
+    });
     await newUser.save();
 
     return NextResponse.json(
-      { message: "User created successfully.", user: newUser },
+      {
+        message: "User created successfully.",
+        user: { id: newUser._id, name: newUser.name, email: newUser.email },
+      },
       { status: 201 }
     );
   } catch (error: any) {

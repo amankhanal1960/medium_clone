@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import type React from "react"; // Added import for React
 
 function LoginForm() {
   const [email, setEmail] = useState("");
@@ -25,14 +26,23 @@ function LoginForm() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password");
+      switch (result.error) {
+        case "CredentialsSignin":
+          setError("Invalid email or password");
+          break;
+        case "UserNotFound":
+          setError("User not found");
+          break;
+        default:
+          setError("An error occurred. Please try again.");
+      }
     } else {
       router.push("/membership"); // Redirect after successful login
     }
   };
 
   const handleSignupRedirect = () => {
-    router.push("/signUp"); // Redirect to signup page
+    router.push("/signUp");
   };
 
   return (

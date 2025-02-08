@@ -1,9 +1,9 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import User from "@/lib/modals/user"; // User model
-import connect from "@/lib/db"; // MongoDB connection utility
+import User from "@/lib/modals/user";
+import connect from "@/lib/db";
 
 declare module "next-auth" {
   interface Session {
@@ -22,19 +22,19 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       async profile(profile) {
-        await connect(); // Ensure DB connection
+        await connect();
 
         const user = await User.findOne({ email: profile.email });
 
         if (!user) {
-          // Create new user if not found
           const newUser = new User({
             name: profile.name,
             email: profile.email,
             image: profile.picture,
+            oauthProvider: "google",
           });
 
-          await newUser.save(); // Save the new user to DB
+          await newUser.save();
           return {
             id: newUser._id.toString(),
             name: newUser.name,
@@ -82,14 +82,13 @@ export const authOptions: NextAuthOptions = {
           id: user._id.toString(),
           name: user.name,
           email: user.email,
-          image: user.image,
         };
       },
     }),
   ],
 
   pages: {
-    signIn: "/login", // Custom login page
+    signIn: "/login",
   },
 
   callbacks: {
@@ -101,29 +100,29 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ baseUrl }) {
-      return `${baseUrl}/membership`; // Redirect to membership page after sign-in
+      return `${baseUrl}/membership`;
     },
 
     async session({ session, token }) {
       if (token.sub) {
-        session.user.id = token.sub; // Add user ID to session
+        session.user.id = token.sub;
       }
       return session;
     },
 
     async jwt({ token, user }) {
       if (user) {
-        token.sub = user.id; // Add user ID to JWT
+        token.sub = user.id;
       }
       return token;
     },
   },
 
-  secret: process.env.NEXTAUTH_SECRET, // Ensure this is set in .env.local
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt", // Use JWT for session strategy
+    strategy: "jwt",
   },
-  debug: true, // Enable debugging for development
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);

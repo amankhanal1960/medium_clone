@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import type React from "react"; // Added import for React
 
 function SignupForm() {
   const [name, setName] = useState("");
@@ -19,23 +19,26 @@ function SignupForm() {
       return;
     }
 
-    // Perform signup logic here, e.g., API call to register the user
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
 
-    const result = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (result?.error) {
-      setError("Failed to create an account.");
-    } else {
-      router.push("/membership"); // Redirect to membership page after successful signup
+      if (response.ok) {
+        router.push("/login"); // Redirect to login page after successful signup
+      } else {
+        const data = await response.json();
+        setError(data.message || "Failed to create an account.");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
     }
   };
 
   const handleLoginRedirect = () => {
-    router.push("/login"); // Redirect to login page
+    router.push("/login");
   };
 
   return (
