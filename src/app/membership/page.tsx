@@ -25,7 +25,7 @@ interface Blog {
 }
 
 const Blog = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,13 +50,13 @@ const Blog = () => {
 
       if (data.blogs && data.blogs.length > 0) {
         // Map _id to id for frontend consistency
-        const formattedBlogs = data.blogs.map((blog: any) => ({
+        const formattedBlogs = data.blogs.map((blog: Blog) => ({
           ...blog,
           id: blog._id, // Map MongoDB _id to id
         }));
         setBlogs(formattedBlogs);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error fetching blogs:", error);
       if (axios.isAxiosError(error)) {
         if (error.code === "ECONNABORTED") {
@@ -78,7 +78,7 @@ const Blog = () => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
       //Return a new promise
-      return new Promise((resolve, reject) => {
+      return new Promise<string>((resolve, reject) => {
         //Perform the axios DELETE request
         axios
           .delete(`http://localhost:3000/api/blogs/${id}`)
@@ -108,10 +108,6 @@ const Blog = () => {
       return Promise.resolve("Blog deletion cancelled");
     }
   };
-
-  // if (status === "unauthenticated") {
-  //   return null; // This will prevent the component from rendering while redirecting
-  // }
 
   if (error) {
     return <NetworkError errorType={error} onRetry={() => fetchBlogs()} />;

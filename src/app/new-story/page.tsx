@@ -77,8 +77,8 @@ const Story = () => {
       } else {
         toast.error("Failed to publish blog!!");
       }
-    } catch (error: any) {
-      console.error("Error publishing blog: " + error.message);
+    } catch (error) {
+      console.error("Error publishing blog: " + (error as Error).message);
     }
   };
 

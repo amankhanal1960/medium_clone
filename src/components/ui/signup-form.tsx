@@ -1,7 +1,8 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type React from "react"; // Added import for React
+import type React from "react";
 
 function SignupForm() {
   const [name, setName] = useState("");
@@ -32,8 +33,9 @@ function SignupForm() {
         const data = await response.json();
         setError(data.message || "Failed to create an account.");
       }
-    } catch (error) {
+    } catch (err) {
       setError("An error occurred. Please try again.");
+      console.error("Signup error:", err);
     }
   };
 

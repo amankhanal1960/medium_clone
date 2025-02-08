@@ -57,7 +57,7 @@ const Profile = () => {
         Tell the world about yourself
       </h4>
       <p className="text-gray-500 mt-6 text-xs text-center sm:px-24">
-        Here's where you can share more about yourself: your history, work
+        Here is where you can share more about yourself: your history, work
         experience, accomplishments, interests, dreams, and more.
       </p>
       <button className="border py-2 px-4 mt-5 mb-12 rounded-3xl border-black bg-white text-black text-sm">

@@ -10,11 +10,14 @@ export async function GET() {
     const blogs = await Blog.find({});
 
     return NextResponse.json({ blogs }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
 
     return NextResponse.json(
-      { message: "Error fetching the data ", error: error.message },
+      {
+        message: "Error fetching the data ",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       {
         status: 500,
       }
@@ -42,11 +45,14 @@ export const POST = async (request: Request) => {
       { message: "Blog is Created", blog: newBlog },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
 
     return NextResponse.json(
-      { message: "Error in creating Blog ", error: error.message },
+      {
+        message: "Error in creating Blog ",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }

@@ -47,10 +47,13 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
-      { message: "Error in saving user.", error: error.message },
+      {
+        message: "Error in saving user.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
@@ -88,10 +91,13 @@ export async function GET(request: NextRequest) {
       { message: "User retrieved successfully.", user },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
-      { message: "Error in retrieving user.", error: error.message },
+      {
+        message: "Error in retrieving user.",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }

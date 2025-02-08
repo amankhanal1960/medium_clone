@@ -4,6 +4,7 @@ import type React from "react";
 import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface RegisterPopupProps {
   onClose: () => void;
@@ -47,7 +48,13 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
           onClick={onClose}
           aria-label="Close login popup"
         >
-          <img src="/assects/x.svg" alt="Close" className="w-full h-full" />
+          <Image
+            src="/assects/x.svg"
+            alt="Close"
+            className="w-full h-full"
+            height={600}
+            width={600}
+          />
         </button>
         <h2 className="text-[26px] font-normal text-black mt-20 mb-20 text-center">
           {mode === "write"
@@ -61,19 +68,23 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
             onClick={handleGoogleSignIn}
           >
-            <img
+            <Image
               src="/assects/google.png"
               alt="Google logo"
               className="absolute left-3 w-4 h-4"
+              height={600}
+              width={600}
             />
             <span className="flex-grow text-center">Sign in with Google</span>
           </button>
 
           <button className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100">
-            <img
+            <Image
               src="/assects/facebook.png"
               alt="Facebook logo"
               className="absolute left-3 w-4 h-4"
+              height={600}
+              width={600}
             />
             <span className="flex-grow text-center">Sign in with Facebook</span>
           </button>
@@ -82,10 +93,12 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
             onClick={() => router.push("/signUp")}
           >
-            <img
+            <Image
               src="/assects/mail.png"
               alt="Mail logo"
               className="absolute left-3 w-4 h-4"
+              height={600}
+              width={600}
             />
             <span className="flex-grow text-center">Sign in with email</span>
           </button>
@@ -102,11 +115,11 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
 
         <div className="mt-24 text-center text-xs font-light text-gray-600 px-10">
           <p>
-            Click "Sign in" to agree to Medium's&nbsp;
+            Click &quot;Sign in&quot; to agree to Medium&apos;s&nbsp;
             <a href="#" className="underline">
               Terms of Service
             </a>
-            &nbsp;and acknowledge that Medium's&nbsp;
+            &nbsp;and acknowledge that Medium&apos;s&nbsp;
             <a href="#" className="underline">
               Privacy Policy
             </a>
