@@ -30,7 +30,8 @@
     ".next/types/**/*.ts",
     "src/app/LoginPopup/page.tsx",
     "src/app/LoginPopup/register.js",
-    "src/components/Header.jsx"
+    "src/components/Header.jsx",
+    "src/app/api/blogs/[id]/route.ts"
   ],
   "exclude": ["node_modules"]
 }
