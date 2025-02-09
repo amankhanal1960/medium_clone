@@ -111,7 +111,7 @@ const Story = () => {
             <i className="fa-solid fa-ellipsis cursor-pointer"></i>
             <i className="flex fa-regular fa-bell fa-lg cursor-pointer hover:text-gray-900"></i>
             <Image
-              src="/assects/me1.jpg"
+              src={!user?.image ? defaultImageUrl : user.image}
               alt="Placeholder Image"
               width={600}
               height={600}
@@ -208,7 +208,7 @@ const Story = () => {
                 <div className="cursor-pointer text-gray-700">
                   {image ? (
                     <Image
-                      src={!user?.image ? defaultImageUrl : user.image}
+                      src={image}
                       alt="Blog Image"
                       width={200}
                       height={200}
