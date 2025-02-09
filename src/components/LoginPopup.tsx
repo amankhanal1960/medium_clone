@@ -119,7 +119,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
         <div className="mt-10 text-center">
           <p className="text-sm font-semibold text-gray-800">
             No account?&nbsp;
-            <a href="#" className="text-green-800 font-bold">
+            <a href="/signUp" className="text-green-800 font-bold">
               Create one
             </a>
           </p>

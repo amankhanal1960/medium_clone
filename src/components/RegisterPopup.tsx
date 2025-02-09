@@ -107,7 +107,7 @@ const RegisterPopup = ({ onClose, mode = "start" }: RegisterPopupProps) => {
         <div className="mt-10 text-center">
           <p className="text-sm font-semibold text-gray-800">
             Already have an account?&nbsp;
-            <a href="#" className="text-green-800  font-bold">
+            <a href="/login" className="text-green-800  font-bold">
               Sign in
             </a>
           </p>
