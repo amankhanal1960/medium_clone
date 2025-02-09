@@ -24,6 +24,18 @@ interface Blog {
   image: string;
 }
 
+interface ApiBlog {
+  _id: string;
+  author: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  likes: number;
+  comments: number;
+  image: string;
+}
+
 const Blog = () => {
   const { status } = useSession();
   const router = useRouter();
@@ -43,16 +55,19 @@ const Blog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/blogs", {
-        timeout: 15000,
-      });
+      const response = await axios.get<{ blogs: ApiBlog[] }>(
+        "http://localhost:3000/api/blogs",
+        {
+          timeout: 15000,
+        }
+      );
       const { data } = response;
 
       if (data.blogs && data.blogs.length > 0) {
-        // Map _id to id for frontend consistency
-        const formattedBlogs = data.blogs.map((blog: Blog) => ({
-          ...blog,
-          id: blog._id, // Map MongoDB _id to id
+        // Properly map API blogs to frontend Blog interface
+        const formattedBlogs = data.blogs.map(({ _id, ...rest }) => ({
+          ...rest,
+          id: _id,
         }));
         setBlogs(formattedBlogs);
       }

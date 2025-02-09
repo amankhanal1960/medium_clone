@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { navLinks } from "@/src/constants";
 // import { useRouter } from "next/navigation"
 import Link from "next/link";
-import LoginPopup from "../app/LoginPopup/page";
-import RegisterPopup from "../app/register/page";
+import LoginPopup from "./LoginPopup";
+import RegisterPopup from "./RegisterPopup";
 
 const Header = () => {
   const [isLoginPopupOpen, setisLoginPopupOpen] = useState(false);

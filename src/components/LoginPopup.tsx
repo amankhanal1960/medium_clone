@@ -17,9 +17,8 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
     return () => setIsRegisterPopupOpen(false);
   }, []);
 
-  // Use NextAuth signIn for Google OAuth
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/membership" }); // Redirect to /membership after login
+    signIn("google", { callbackUrl: "/membership" });
   };
 
   return (
@@ -57,7 +56,7 @@ const LoginPopup = ({ onClose }: LoginPopupProps) => {
         <div className="flex flex-col gap-3 items-center justify-center">
           <button
             className="relative w-[300px] flex items-center border border-black rounded-full px-4 py-[10px] text-sm font-medium text-gray-800 hover:bg-gray-100"
-            onClick={handleGoogleSignIn} // ✅ Use NextAuth for Google login
+            onClick={handleGoogleSignIn}
           >
             <Image
               src="/assects/google.png"

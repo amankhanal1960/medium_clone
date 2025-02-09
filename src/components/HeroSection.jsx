@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-import RegisterPopup from "../app/register/page";
+import RegisterPopup from "./RegisterPopup";
 
 const HeroSection = () => {
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);

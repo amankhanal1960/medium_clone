@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import Blog from "@/lib/modals/blog";
@@ -11,12 +12,12 @@ interface BlogRequestBody {
 
 // Update a blog post by ID
 export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } } // Access params directly
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = params;
+  const { id } = await params;
 
+  try {
     // Validate the blog ID
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -53,10 +54,9 @@ export async function PUT(
         description: body.description,
         image: body.image,
       },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
-    // Return success response
     return NextResponse.json(
       { message: "Blog updated successfully.", blog: updatedBlog },
       { status: 200 }
@@ -75,12 +75,12 @@ export async function PUT(
 
 // Delete a blog post by ID
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } } // Access params directly
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = params;
+  const { id } = await params;
 
+  try {
     // Validate the blog ID
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -95,12 +95,10 @@ export async function DELETE(
     // Delete the blog
     const deletedBlog = await Blog.findByIdAndDelete(id);
 
-    // Check if the blog was found and deleted
     if (!deletedBlog) {
       return NextResponse.json({ message: "Blog not found." }, { status: 404 });
     }
 
-    // Return success response
     return NextResponse.json(
       { message: "Blog deleted successfully.", blog: deletedBlog },
       { status: 200 }
