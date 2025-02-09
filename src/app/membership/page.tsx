@@ -55,12 +55,9 @@ const Blog = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await axios.get<{ blogs: ApiBlog[] }>(
-        "http://localhost:3000/api/blogs",
-        {
-          timeout: 15000,
-        }
-      );
+      const response = await axios.get<{ blogs: ApiBlog[] }>("/api/blogs", {
+        timeout: 15000,
+      });
       const { data } = response;
 
       if (data.blogs && data.blogs.length > 0) {
@@ -96,7 +93,7 @@ const Blog = () => {
       return new Promise<string>((resolve, reject) => {
         //Perform the axios DELETE request
         axios
-          .delete(`http://localhost:3000/api/blogs/${id}`)
+          .delete(`/api/blogs/${id}`)
           .then((res) => {
             if (res.status === 200) {
               //Handle success. Resolve the promise

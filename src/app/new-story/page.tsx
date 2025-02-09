@@ -51,10 +51,7 @@ const Story = () => {
         const formdata = new FormData();
         formdata.append("image", imageFile);
 
-        const res = await axios.post(
-          "http://localhost:3000/api/uploads",
-          formdata
-        );
+        const res = await axios.post("/api/uploads", formdata);
         if (res.status == 200) {
           imageUrl = res.data.url;
         } else {
@@ -63,7 +60,7 @@ const Story = () => {
       }
 
       //Publish the blog to the API
-      const res = await axios.post("http://localhost:3000/api/blogs", {
+      const res = await axios.post("/api/blogs", {
         title,
         description,
         author,
