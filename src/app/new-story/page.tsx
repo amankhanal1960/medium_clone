@@ -7,8 +7,13 @@ import { PopUp } from "@/src/components/navbar";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 const Story = () => {
+  const { data: session } = useSession(); // Get the user session
+  const user = session?.user; //Extracts user details
+  const defaultImageUrl = "/User.png";
+
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,6 +26,7 @@ const Story = () => {
 
   //title: The state variable holding the title of the story
   //setTitle: The function to update the title of the story when the input changes
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
@@ -91,7 +97,7 @@ const Story = () => {
               Medium
             </h1>
             <div className="text-black text-sm mb-2">
-              <p>Draft in Amankhanal</p>
+              <p>Draft in {user?.name || "Guest"}</p>
             </div>
           </div>
           <div className="flex gap-6 items-center text-gray-400">
@@ -202,7 +208,7 @@ const Story = () => {
                 <div className="cursor-pointer text-gray-700">
                   {image ? (
                     <Image
-                      src={image || "/placeholder.svg"}
+                      src={!user?.image ? defaultImageUrl : user.image}
                       alt="Blog Image"
                       width={200}
                       height={200}
