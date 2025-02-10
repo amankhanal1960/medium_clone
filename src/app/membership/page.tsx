@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/src/components/navbar";
@@ -37,6 +37,21 @@ interface ApiBlog {
 }
 
 const Blog = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // Functions to scroll the container
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -100, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 100, behavior: "smooth" });
+    }
+  };
+
   const { status } = useSession();
   const router = useRouter();
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -128,16 +143,28 @@ const Blog = () => {
   return (
     <div>
       <Navbar />
-      <div className="flex h-full min-h-screen">
+      {/* Outer container remains unchanged */}
+      <div className="flex flex-col lg:flex-row h-full min-h-screen">
         {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%]">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
-            {/* Recommendations Section */}
-            <div className="text-gray-500 py-8 items-center justify-center">
-              <div className="flex flex-col items-center">
-                <ul className="flex gap-6 text-sm font-semibold">
+            {/* Updated Recommendations Section */}
+            <div className="relative text-gray-500 py-8">
+              {/* Left Arrow (only on mobile) */}
+              <button
+                onClick={scrollLeft}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow md:hidden"
+              >
+                <i className="fa-solid fa-chevron-left"></i>
+              </button>
+              {/* Scrollable container */}
+              <div
+                ref={scrollContainerRef}
+                className="overflow-x-auto scroll-smooth whitespace-nowrap pl-8 pr-8"
+              >
+                <ul className="inline-flex gap-6 text-sm font-semibold">
                   {recommendations.map((item, index) => (
-                    <li key={`${item.href}-${index}`}>
+                    <li key={`${item.href}-${index}`} className="min-w-max">
                       <Link className="hover:text-gray-900" href={item.href}>
                         {item.label}
                       </Link>
@@ -145,6 +172,13 @@ const Blog = () => {
                   ))}
                 </ul>
               </div>
+              {/* Right Arrow (only on mobile) */}
+              <button
+                onClick={scrollRight}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow md:hidden"
+              >
+                <i className="fa-solid fa-chevron-right"></i>
+              </button>
               <hr className="border-t border-gray-200 mt-4" />
             </div>
 
