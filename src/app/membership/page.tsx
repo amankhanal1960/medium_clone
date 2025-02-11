@@ -149,18 +149,18 @@ const Blog = () => {
         <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
             {/* Updated Recommendations Section */}
-            <div className="relative text-gray-500 py-8">
+            <div className="relative text-gray-500 py-4 flex items-center">
               {/* Left Arrow (only on mobile) */}
               <button
                 onClick={scrollLeft}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow md:hidden"
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
               >
                 <i className="fa-solid fa-chevron-left"></i>
               </button>
               {/* Scrollable container */}
               <div
                 ref={scrollContainerRef}
-                className="overflow-x-auto scroll-smooth whitespace-nowrap pl-8 pr-8"
+                className="overflow-x-auto scroll-smooth whitespace-nowrap pl-8 pr-8 no-scrollbar"
               >
                 <ul className="inline-flex gap-6 text-sm font-semibold">
                   {recommendations.map((item, index) => (
@@ -175,7 +175,7 @@ const Blog = () => {
               {/* Right Arrow (only on mobile) */}
               <button
                 onClick={scrollRight}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow md:hidden"
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
               >
                 <i className="fa-solid fa-chevron-right"></i>
               </button>
@@ -203,7 +203,7 @@ const Blog = () => {
                       <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
                         {blog.description}
                       </h4>
-                      <div className="text-base flex items-center mt-4 text-gray-500">
+                      <div className="sm:text-base text-sm flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
                         <div className="flex items-center ml-4">
                           <i className="fa-solid fa-hands-clapping mr-1"></i>
@@ -224,11 +224,11 @@ const Blog = () => {
                           alt="Blog Image"
                           width={176}
                           height={112}
-                          className="w-28 min-w-44 h-28 rounded-md mb-4 md:mb-0 object-cover "
+                          className="w-28 sm:min-w-44 sm:h-28 min-w-36 h-20 rounded-md mb-4 md:mb-0 object-cover "
                         />
                       </div>
                       {/* Blog Actions (Icons) */}
-                      <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-6  md:pr-10 text-xs md:text-base ">
+                      <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-2 md:pr-6 sm:text-xs text-base">
                         <i
                           onClick={() => removeBlog(blog.id)}
                           className="fa-solid fa-circle-minus cursor-pointer"

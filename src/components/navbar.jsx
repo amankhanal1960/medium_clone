@@ -12,7 +12,7 @@ const handleLogout = async () => {
 };
 
 export const PopUp = () => (
-  <div className="fixed top-14 right-0 bg-white shadow-lg border border-gray-200 rounded-md p-4 w-72">
+  <div className="fixed top-14 right-0 bg-white shadow-lg border border-gray-200 rounded-md p-4 sm:w-72 w-44 z-20">
     <div>
       <ul className="flex flex-col items-start justify-center gap-6">
         <Link
@@ -98,13 +98,13 @@ const Navbar = () => {
               />
             </div>
           </div>
-          <div className="flex gap-10 items-center">
+          <div className="flex sm:gap-10 gap-6 items-center">
             <div
-              className="sm:flex gap-3 items-center cursor-pointer hidden"
+              className="flex gap-3 items-center cursor-pointer"
               onClick={handleStory}
             >
               <i className="fa-regular fa-pen-to-square fa-lg text-gray-400 hover:text-gray-900"></i>
-              <p className="font-normal text-gray-600 text-base  hover:text-gray-900">
+              <p className="font-normal text-gray-600 text-base  hover:text-gray-900 hidden sm:flex">
                 Write
               </p>
             </div>

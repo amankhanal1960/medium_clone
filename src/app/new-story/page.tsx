@@ -91,12 +91,12 @@ const Story = () => {
         <div className="px-6 py-2 flex items-center justify-between bg-white max-w-[1050px] mx-auto">
           <div className="flex items-end gap-3">
             <h1
-              className="font-bold text-black text-[30px] cursor-pointer"
+              className="font-bold text-black sm:text-[30px] text-[24px] cursor-pointer"
               onClick={handleLogin}
             >
               Medium
             </h1>
-            <div className="text-black text-sm mb-2">
+            <div className="text-black sm:text-sm text-xs mb-2">
               <p>Draft in {user?.name || "Guest"}</p>
             </div>
           </div>
@@ -108,8 +108,11 @@ const Story = () => {
             >
               Publish
             </button>
-            <i className="fa-solid fa-ellipsis cursor-pointer"></i>
-            <i className="flex fa-regular fa-bell fa-lg cursor-pointer hover:text-gray-900"></i>
+            <div className="gap-6 items-center hidden xs:flex ">
+              <i className="fa-solid fa-ellipsis cursor-pointer"></i>
+              <i className="flex fa-regular fa-bell fa-lg cursor-pointer hover:text-gray-900"></i>
+            </div>
+
             <Image
               src={!user?.image ? defaultImageUrl : user.image}
               alt="Placeholder Image"
@@ -127,7 +130,7 @@ const Story = () => {
         <div className="mt-6 max-w-[800px] mx-auto px-6">
           <form>
             <div className=" flex flex-row justify-between">
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col sm:gap-6 gap-4">
                 {/* Author Input */}
                 <div>
                   {isAuthorEditing ? (
@@ -216,15 +219,15 @@ const Story = () => {
                     />
                   ) : (
                     <div className="flex flex-col items-center gap-4">
-                      <div className="text-sm font-medium">
-                        Add an image to your post
+                      <div className="sm:text-sm text-xs font-medium">
+                        Add an image
                       </div>
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           fileInputRef.current?.click();
                         }}
-                        className="flex justify-center text-sm items-center py-2 px-4 text-white rounded-full bg-black hover:bg-gray-800 transition-colors"
+                        className="flex justify-center sm:text-sm text-xs items-center sm:py-2 sm:px-4 py-1.5 px-3 text-white rounded-full bg-black hover:bg-gray-800 transition-colors"
                       >
                         Select Image
                       </button>
