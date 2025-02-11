@@ -144,9 +144,9 @@ const Blog = () => {
     <div>
       <Navbar />
       {/* Outer container remains unchanged */}
-      <div className="flex flex-col lg:flex-row h-full min-h-screen">
+      <div className="flex flex-col lg:flex-row">
         {/* Blog List Section */}
-        <div className="bg-white w-full lg:w-[65%]">
+        <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
             {/* Updated Recommendations Section */}
             <div className="relative text-gray-500 py-8">
@@ -193,17 +193,17 @@ const Blog = () => {
             ) : (
               blogs.map((blog) => (
                 <div key={blog.id} className="mb-8">
-                  <div className="flex justify-around items-end">
+                  <div className="flex items-end gap-x-2 md:gap-x-6">
                     {/* Blog Details */}
-                    <div className="flex-grow pr-4">
-                      <p className="text-sm text-gray-600">{blog.author}</p>
+                    <div className="flex-grow pr-2 md:pr-4">
+                      <p className="mtext-sm text-gray-600">{blog.author}</p>
                       <h1 className="text-xl font-extrabold text-black mt-2">
                         {blog.title}
                       </h1>
-                      <h4 className="text-base font-medium text-gray-400 mt-2">
+                      <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
                         {blog.description}
                       </h4>
-                      <div className="flex items-center mt-4 text-gray-500">
+                      <div className="text-base flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
                         <div className="flex items-center ml-4">
                           <i className="fa-solid fa-hands-clapping mr-1"></i>
@@ -215,24 +215,27 @@ const Blog = () => {
                         </div>
                       </div>
                     </div>
-                    {/* Blog Actions */}
-                    <div className="flex gap-6 text-gray-500 pr-10">
-                      <i
-                        onClick={() => removeBlog(blog.id)}
-                        className="fa-solid fa-circle-minus cursor-pointer"
-                      ></i>
-                      <i className="fa-regular fa-bookmark"></i>
-                      <i className="fa-solid fa-ellipsis"></i>
-                    </div>
-                    {/* Blog Image */}
-                    <div className="flex flex-col items-center justify-center">
-                      <Image
-                        src={blog.image || "/placeholder.svg"}
-                        alt="Blog Image"
-                        width={176}
-                        height={112}
-                        className="min-w-44 h-28 rounded-md mb-4 object-cover"
-                      />
+                    {/* Right Side Container: Image & Icons */}
+                    <div className="flex flex-col md:flex-row items-end ">
+                      {/* Blog Image */}
+                      <div className="order-1 md:order-2">
+                        <Image
+                          src={blog.image || "/placeholder.svg"}
+                          alt="Blog Image"
+                          width={176}
+                          height={112}
+                          className="w-28 min-w-44 h-28 rounded-md mb-4 md:mb-0 object-cover "
+                        />
+                      </div>
+                      {/* Blog Actions (Icons) */}
+                      <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-6  md:pr-10 text-xs md:text-base ">
+                        <i
+                          onClick={() => removeBlog(blog.id)}
+                          className="fa-solid fa-circle-minus cursor-pointer"
+                        ></i>
+                        <i className="fa-regular fa-bookmark"></i>
+                        <i className="fa-solid fa-ellipsis"></i>
+                      </div>
                     </div>
                   </div>
                   <hr className="border-t border-gray-200 mt-6" />

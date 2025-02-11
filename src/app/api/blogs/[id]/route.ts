@@ -3,6 +3,17 @@ import { NextResponse } from "next/server";
 import connect from "@/lib/db";
 import Blog from "@/lib/modals/blog";
 import { Types } from "mongoose";
+import { createClient } from "@supabase/supabase-js";
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Supabase URL and Key must be provided.");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 interface BlogRequestBody {
   title: string;
@@ -92,15 +103,33 @@ export async function DELETE(
     // Connect to the database
     await connect();
 
-    // Delete the blog
-    const deletedBlog = await Blog.findByIdAndDelete(id);
-
-    if (!deletedBlog) {
+    // Find the blog to get the image path
+    const blogToDelete = await Blog.findById(id);
+    if (!blogToDelete) {
       return NextResponse.json({ message: "Blog not found." }, { status: 404 });
     }
 
+    // Delete the image from Supabase storage
+    const { error: deleteImageError } = await supabase.storage
+      .from("images") // Replace with your bucket name
+      .remove([blogToDelete.image]); // Assuming blogToDelete.image contains the image path
+
+    if (deleteImageError) {
+      console.error("Error deleting image from Supabase:", deleteImageError);
+      return NextResponse.json(
+        { message: "Error deleting image from storage." },
+        { status: 500 }
+      );
+    }
+
+    // Delete the blog
+    const deletedBlog = await Blog.findByIdAndDelete(id);
+
     return NextResponse.json(
-      { message: "Blog deleted successfully.", blog: deletedBlog },
+      {
+        message: "Blog and associated image deleted successfully.",
+        blog: deletedBlog,
+      },
       { status: 200 }
     );
   } catch (error: unknown) {
