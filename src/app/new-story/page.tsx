@@ -39,6 +39,8 @@ const Story = () => {
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
   const [isAuthorEditing, setisAuthorEditing] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -82,6 +84,8 @@ const Story = () => {
       }
     } catch (error) {
       console.error("Error publishing blog: " + (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -106,7 +110,7 @@ const Story = () => {
               className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200 cursor-pointer"
               disabled={!title || !description || !author || !image}
             >
-              Publish
+              {isSubmitting ? "Publishing" : "Publish"}
             </button>
             <div className="gap-6 items-center hidden xs:flex ">
               <i className="fa-solid fa-ellipsis cursor-pointer"></i>

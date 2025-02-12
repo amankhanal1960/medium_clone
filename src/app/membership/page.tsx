@@ -22,6 +22,8 @@ interface Blog {
   likes: number;
   comments: number;
   image: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
 }
 
 interface ApiBlog {
@@ -38,20 +40,6 @@ interface ApiBlog {
 
 const Blog = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  // Functions to scroll the container
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -100, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 100, behavior: "smooth" });
-    }
-  };
-
   const { status } = useSession();
   const router = useRouter();
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -81,6 +69,8 @@ const Blog = () => {
           .map(({ _id, ...rest }) => ({
             ...rest,
             id: _id,
+            isBookmarked: false,
+            isLiked: false,
           }))
           .reverse();
         setBlogs(formattedBlogs);
@@ -102,6 +92,45 @@ const Blog = () => {
       setLoading(false);
     }
   };
+
+  // const handleBookmarkClick = async (blogId: string) => {
+  //   try {
+  //     const response = await axios.post("/api/bookmarks", { blogId });
+  //     if (response.status === 200) {
+  //       setBlogs((prev) =>
+  //         prev.map((blog) =>
+  //           blog.id === blogId
+  //             ? { ...blog, isBookmarked: !blog.isBookmarked }
+  //             : blog
+  //         )
+  //       );
+  //     }
+  //   } catch {
+  //     toast.error("Failed to update bookmark");
+  //   }
+  // };
+
+  // const handleLikeClick = async (blogId: string) => {
+  //   try {
+  //     const response = await axios.post(`/api/blogs/${blogId}/like`);
+  //     if (response.status === 200) {
+  //       setBlogs((prev) =>
+  //         prev.map((blog) =>
+  //           blog.id === blogId
+  //             ? {
+  //                 ...blog,
+  //                 likes: response.data.likes,
+  //                 isLiked: response.data.isLiked,
+  //               }
+  //             : blog
+  //         )
+  //       );
+  //     }
+  //   } catch {
+  //     toast.error("Failed to like blog");
+  //   }
+  // };
+
   //writing the code for the delete with promise,resolve and reject
   const removeBlog = (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
@@ -141,6 +170,19 @@ const Blog = () => {
   if (error) {
     return <NetworkError errorType={error} onRetry={() => fetchBlogs()} />;
   }
+
+  // Functions to scroll the container
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -100, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 100, behavior: "smooth" });
+    }
+  };
 
   return (
     <div>
