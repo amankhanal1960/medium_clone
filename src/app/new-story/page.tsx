@@ -52,6 +52,7 @@ const Story = () => {
   const handlePublish = async (event: React.FormEvent) => {
     event.preventDefault();
     const currentDate = new Date().toLocaleDateString();
+    setIsSubmitting(true);
 
     try {
       let imageUrl = "";
@@ -108,9 +109,11 @@ const Story = () => {
             <button
               onClick={handlePublish}
               className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200 cursor-pointer"
-              disabled={!title || !description || !author || !image}
+              disabled={
+                !title || !description || !author || !image || isSubmitting
+              }
             >
-              {isSubmitting ? "Publishing" : "Publish"}
+              {isSubmitting ? "Publishing..." : "Publish"}
             </button>
             <div className="gap-6 items-center hidden xs:flex ">
               <i className="fa-solid fa-ellipsis cursor-pointer"></i>
