@@ -77,10 +77,12 @@ const Blog = () => {
 
       if (data.blogs && data.blogs.length > 0) {
         // Properly map API blogs to frontend Blog interface
-        const formattedBlogs = data.blogs.map(({ _id, ...rest }) => ({
-          ...rest,
-          id: _id,
-        }));
+        const formattedBlogs = data.blogs
+          .map(({ _id, ...rest }) => ({
+            ...rest,
+            id: _id,
+          }))
+          .reverse();
         setBlogs(formattedBlogs);
       }
     } catch (error) {
@@ -144,12 +146,12 @@ const Blog = () => {
     <div>
       <Navbar />
       {/* Outer container remains unchanged */}
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row relative">
         {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
             {/* Updated Recommendations Section */}
-            <div className="relative text-gray-500 py-4 flex items-center">
+            <div className="bg-white text-gray-500 py-4 flex items-center sticky top-0">
               {/* Left Arrow (only on mobile) */}
               <button
                 onClick={scrollLeft}
@@ -179,8 +181,8 @@ const Blog = () => {
               >
                 <i className="fa-solid fa-chevron-right"></i>
               </button>
-              <hr className="border-t border-gray-200 mt-4" />
             </div>
+            <hr className="border-t border-gray-200 mb-4" />
 
             {/* Blog Cards */}
             {loading ? (
@@ -206,11 +208,11 @@ const Blog = () => {
                       <div className="sm:text-base text-sm flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
                         <div className="flex items-center ml-4">
-                          <i className="fa-solid fa-hands-clapping mr-1"></i>
+                          <i className="fa-solid fa-hands-clapping mr-1 cursor-pointer"></i>
                           <p>{blog.likes}</p>
                         </div>
                         <div className="flex items-center ml-4">
-                          <i className="fa-solid fa-comment mr-1"></i>
+                          <i className="fa-solid fa-comment mr-1 cursor-pointer"></i>
                           <p>{blog.comments}</p>
                         </div>
                       </div>
@@ -233,8 +235,8 @@ const Blog = () => {
                           onClick={() => removeBlog(blog.id)}
                           className="fa-solid fa-circle-minus cursor-pointer"
                         ></i>
-                        <i className="fa-regular fa-bookmark"></i>
-                        <i className="fa-solid fa-ellipsis"></i>
+                        <i className="fa-regular fa-bookmark cursor-pointer"></i>
+                        <i className="fa-solid fa-ellipsis cursor-pointer"></i>
                       </div>
                     </div>
                   </div>

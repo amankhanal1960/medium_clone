@@ -25,6 +25,9 @@ const Footer = () => {
             </li>
           ))}
         </ul>
+        <div className="absolute bottom-2 right-1 sm:font-bold sm:text-xs text-[8px] lg:text-black">
+          Copyright © 2025 Aman Khanal. All rights reserved.
+        </div>
       </div>
     </footer>
   );
