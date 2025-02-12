@@ -24,28 +24,28 @@ export const PopUp = () => (
         </Link>
         <Link
           href={"/"}
-          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
+          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition cursor-pointer"
         >
           <i className="fa-regular fa-bookmark"></i>
           Library
         </Link>
         <Link
           href={"/"}
-          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
+          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition cursor-pointer"
         >
           <i className="fa-regular fa-file-lines"></i>
           Stories
         </Link>
         <Link
           href={"/"}
-          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition"
+          className="flex items-center gap-4 text-gray-600 hover:text-gray-900 transition cursor-pointer"
         >
           <i className="fa-solid fa-chart-simple"></i>
           Stats
         </Link>
         <p
           onClick={handleLogout}
-          className="flex items-center gap-4 text-gray-600  cursor-pointer hover:text-gray-900 transition"
+          className="flex items-center gap-4 text-gray-600 cursor-pointer hover:text-gray-900 transition"
         >
           <i className="fa-solid fa-right-from-bracket"></i>
           Log Out
@@ -84,7 +84,7 @@ const Navbar = () => {
         <div className="px-6 py-2 flex items-center justify-between bg-white">
           <div className="flex items-center gap-4">
             <h1
-              className="font-bold text-black text-[30px] cursor-pointer"
+              className="font-bold text-black text-[30px] cursor-pointer transition"
               onClick={handleLogin}
             >
               Medium
@@ -103,12 +103,12 @@ const Navbar = () => {
               className="flex gap-3 items-center cursor-pointer"
               onClick={handleStory}
             >
-              <i className="fa-regular fa-pen-to-square fa-lg text-gray-400 hover:text-gray-900"></i>
-              <p className="font-normal text-gray-600 text-base  hover:text-gray-900 hidden sm:flex">
+              <i className="fa-regular fa-pen-to-square fa-lg text-gray-400 hover:text-gray-900 transition"></i>
+              <p className="font-normal text-gray-600 text-base hover:text-gray-950 transition hidden sm:flex">
                 Write
               </p>
             </div>
-            <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer hover:text-gray-900"></i>
+            <i className="flex fa-regular fa-bell fa-lg text-gray-400 cursor-pointer hover:text-gray-900 transition"></i>
             <Image
               src={
                 navbarImageError || !user?.image ? defaultImageUrl : user.image

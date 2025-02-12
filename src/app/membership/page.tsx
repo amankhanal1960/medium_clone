@@ -150,39 +150,41 @@ const Blog = () => {
         {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
-            {/* Updated Recommendations Section */}
-            <div className="bg-white text-gray-500 py-4 flex items-center sticky top-0">
-              {/* Left Arrow (only on mobile) */}
-              <button
-                onClick={scrollLeft}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
-              >
-                <i className="fa-solid fa-chevron-left"></i>
-              </button>
-              {/* Scrollable container */}
-              <div
-                ref={scrollContainerRef}
-                className="overflow-x-auto scroll-smooth whitespace-nowrap pl-8 pr-8 no-scrollbar"
-              >
-                <ul className="inline-flex gap-6 text-sm font-semibold">
-                  {recommendations.map((item, index) => (
-                    <li key={`${item.href}-${index}`} className="min-w-max">
-                      <Link className="hover:text-gray-900" href={item.href}>
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            {/* Recommendations Section */}
+            <div className="sticky top-0">
+              <div className="bg-white text-gray-500 py-4 flex items-center ">
+                {/* Left Arrow (only on mobile) */}
+                <button
+                  onClick={scrollLeft}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
+                >
+                  <i className="fa-solid fa-chevron-left"></i>
+                </button>
+                {/* Scrollable container */}
+                <div
+                  ref={scrollContainerRef}
+                  className="overflow-x-auto scroll-smooth whitespace-nowrap pl-8 pr-8 no-scrollbar"
+                >
+                  <ul className="inline-flex gap-6 text-sm font-semibold">
+                    {recommendations.map((item, index) => (
+                      <li key={`${item.href}-${index}`} className="min-w-max">
+                        <Link className="hover:text-gray-900" href={item.href}>
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {/* Right Arrow (only on mobile) */}
+                <button
+                  onClick={scrollRight}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
+                >
+                  <i className="fa-solid fa-chevron-right"></i>
+                </button>
               </div>
-              {/* Right Arrow (only on mobile) */}
-              <button
-                onClick={scrollRight}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
-              >
-                <i className="fa-solid fa-chevron-right"></i>
-              </button>
+              <hr className="border-t border-gray-200 mb-4 z-50" />
             </div>
-            <hr className="border-t border-gray-200 mb-4" />
 
             {/* Blog Cards */}
             {loading ? (
@@ -256,6 +258,17 @@ const Blog = () => {
             <div className="p-4">
               <h2 className="text-xl font-semibold">Membership Content</h2>
             </div>
+            <ul className="flex flex-wrap items-end gap-2 text-[11px] w-3/5 pl-4 text-black">
+              <Link href={"/"}>Help</Link>
+              <Link href={"/"}>Status</Link>
+              <Link href={"/"}>About</Link>
+              <Link href={"/"}>Careers</Link>
+              <Link href={"/"}>Press</Link>
+              <Link href={"/"}>Blog</Link>
+              <Link href={"/"}>Privacy</Link>
+              <Link href={"/"}>Text to speech</Link>
+              <Link href={"/"}>Teams</Link>
+            </ul>
           </div>
         </div>
       </div>
