@@ -149,14 +149,14 @@ const Blog = () => {
       <div className="flex flex-col lg:flex-row relative">
         {/* Blog List Section */}
         <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
-          <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 ml-8 mr-8">
+          <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 sm:ml-8 sm:mr-8 ml-4 mr-4">
             {/* Recommendations Section */}
             <div className="sticky top-0">
               <div className="bg-white text-gray-500 py-4 flex items-center ">
                 {/* Left Arrow (only on mobile) */}
                 <button
                   onClick={scrollLeft}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white bg-opacity-50 backdrop-blur-md"
                 >
                   <i className="fa-solid fa-chevron-left"></i>
                 </button>
@@ -178,7 +178,7 @@ const Blog = () => {
                 {/* Right Arrow (only on mobile) */}
                 <button
                   onClick={scrollRight}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white bg-opacity-50 backdrop-blur-md md:hidden"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white bg-opacity-50 backdrop-blur-md"
                 >
                   <i className="fa-solid fa-chevron-right"></i>
                 </button>
