@@ -74,6 +74,9 @@ importers:
       react-router-dom:
         specifier: ^7.0.2
         version: 7.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-show-more-text:
+        specifier: ^1.7.1
+        version: 1.7.1(react@18.3.1)
       react-toastify:
         specifier: ^11.0.3
         version: 11.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1835,6 +1838,11 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react-show-more-text@1.7.1:
+    resolution: {integrity: sha512-k+NyTogrBgPVpE84r6AdDLgf60k9cR4F0zlhp3w8Hoquq+UStKjAOatsVYDLwfWD8wqF6smRXohi2rvQZRpQDQ==}
+    peerDependencies:
+      react: 16 - 18.x
 
   react-toastify@11.0.3:
     resolution: {integrity: sha512-cbPtHJPfc0sGqVwozBwaTrTu1ogB9+BLLjd4dDXd863qYLj7DGrQ2sg5RAChjFUB4yc3w8iXOtWcJqPK/6xqRQ==}
@@ -4132,6 +4140,11 @@ snapshots:
       turbo-stream: 2.4.0
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  react-show-more-text@1.7.1(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
 
   react-toastify@11.0.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

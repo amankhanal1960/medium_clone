@@ -11,6 +11,7 @@ import axios from "axios";
 import BlogCardSkeleton from "./blogCardSkeleton";
 import { toast } from "react-toastify";
 import NetworkError from "@/src/components/networkError";
+import ShowMoreText from "react-show-more-text";
 
 interface Blog {
   id: string;
@@ -43,8 +44,6 @@ interface ApiBlog {
   comments: number;
   image: string;
 }
-// const { data: session } = useSession();
-// const user = session?.user;
 
 const Blog = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -234,7 +233,18 @@ const Blog = () => {
                         {blog.title}
                       </h1>
                       <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
-                        {blog.description}
+                        <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
+                          <ShowMoreText
+                            lines={3}
+                            more="See more"
+                            less="See less"
+                            anchorClass="text-gray-800 cursor-pointer text-sm"
+                            expanded={false}
+                            truncatedEndingComponent="... "
+                          >
+                            {blog.description}
+                          </ShowMoreText>
+                        </h4>
                       </h4>
                       <div className="sm:text-base text-sm flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
