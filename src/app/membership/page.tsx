@@ -313,6 +313,11 @@ const Blog = () => {
               ))
             )}
           </div>
+          <Link href="/new-story">
+            <button className="lg:hidden flex fixed bottom-4 right-4 bg-green-600 text-white rounded-full w-12 h-12 items-center justify-center shadow-lg transform hover:-translate-y-1.5 transition-all duration-200">
+              <i className="fa-regular fa-pen-to-square fa-lg"></i>
+            </button>
+          </Link>
         </div>
 
         {/* Divider */}
