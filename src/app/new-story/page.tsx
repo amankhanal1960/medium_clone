@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Image from "next/image";
 import { PopUp } from "@/src/components/navbar";
@@ -16,6 +16,14 @@ const Story = () => {
 
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (descriptionRef.current) {
+      descriptionRef.current.focus();
+    }
+    setisDescriptionEditing(true);
+  }, []);
 
   const handleLogin = () => router.push("/");
 
@@ -131,7 +139,7 @@ const Story = () => {
               <div className="flex flex-col sm:gap-6 gap-4">
                 {/* Author Input */}
                 <div>
-                  <p className="mt-1 w-full rounded-md sm:text-sm text-gray-700">
+                  <p className="mt-1 w-full rounded-md sm:text-base text-sm text-gray-700">
                     {user?.name || "Author"}
                   </p>
                 </div>
@@ -144,13 +152,13 @@ const Story = () => {
                       onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
                       placeholder="Title"
                       onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
-                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-700"
+                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-800"
                       autoFocus
                       aria-label="Edit Title"
                     />
                   ) : (
                     <div
-                      className="cursor-text text-2xl font-bold text-gray-700"
+                      className="cursor-text lg:text-4xl sm:text-2xl text-xl font-bold text-gray-400"
                       onClick={() => setisTitleEditing(true)} //starts editing mode when clicked
                     >
                       {/* shows either the current title or the placeholder */}
@@ -167,16 +175,16 @@ const Story = () => {
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Write Your Story...."
                       onBlur={() => setisDescriptionEditing(false)}
-                      className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-700 resize-none"
+                      className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-800 resize-none"
                       autoFocus
                       aria-label="Edit Description"
                     ></textarea>
                   ) : (
                     <div
                       onClick={() => setisDescriptionEditing(true)}
-                      className="cursor-text text-gray-700 min-h-[100px]"
+                      className="cursor-text text-gray-400 min-h-[100px] sm:text-2xl"
                     >
-                      {description || "Description"}
+                      {description || "Tell your story..."}
                     </div>
                   )}
                 </div>
