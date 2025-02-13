@@ -7,10 +7,7 @@ export async function GET() {
   try {
     await connect();
 
-    const blogs = await Blog.find({ author: { $exists: true } }).populate(
-      "author",
-      "name image"
-    );
+    const blogs = await Blog.find().populate("author", "_id name image");
 
     return NextResponse.json({ blogs }, { status: 200 });
   } catch (error: unknown) {

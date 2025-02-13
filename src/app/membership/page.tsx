@@ -105,44 +105,6 @@ const Blog = () => {
     }
   };
 
-  // const handleBookmarkClick = async (blogId: string) => {
-  //   try {
-  //     const response = await axios.post("/api/bookmarks", { blogId });
-  //     if (response.status === 200) {
-  //       setBlogs((prev) =>
-  //         prev.map((blog) =>
-  //           blog.id === blogId
-  //             ? { ...blog, isBookmarked: !blog.isBookmarked }
-  //             : blog
-  //         )
-  //       );
-  //     }
-  //   } catch {
-  //     toast.error("Failed to update bookmark");
-  //   }
-  // };
-
-  // const handleLikeClick = async (blogId: string) => {
-  //   try {
-  //     const response = await axios.post(`/api/blogs/${blogId}/like`);
-  //     if (response.status === 200) {
-  //       setBlogs((prev) =>
-  //         prev.map((blog) =>
-  //           blog.id === blogId
-  //             ? {
-  //                 ...blog,
-  //                 likes: response.data.likes,
-  //                 isLiked: response.data.isLiked,
-  //               }
-  //             : blog
-  //         )
-  //       );
-  //     }
-  //   } catch {
-  //     toast.error("Failed to like blog");
-  //   }
-  // };
-
   //writing the code for the delete with promise,resolve and reject
   const removeBlog = (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
@@ -166,12 +128,13 @@ const Blog = () => {
             }
           })
           .catch((error) => {
-            //Handle request error, reject the promise
-            console.error("Error deleting blog:", error.message);
-            toast.error(
-              "An error occurred while deleting the blog. Please try again."
-            );
-            reject(error); //pass the error to the caller
+            if (error.response?.status === 403) {
+              toast.error(
+                "Forbidden! You are not authorized to delete this blog."
+              );
+            } else {
+              toast.error("An error occurred. Please try again.");
+            }
           });
       });
     } else {

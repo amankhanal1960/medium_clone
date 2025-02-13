@@ -4,6 +4,8 @@ import connect from "@/lib/db";
 import Blog from "@/lib/modals/blog";
 import { Types } from "mongoose";
 import { createClient } from "@supabase/supabase-js";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/config/auth";
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -92,6 +94,10 @@ export async function DELETE(
   const { id } = await params;
 
   try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
     // Validate the blog ID
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
@@ -103,10 +109,17 @@ export async function DELETE(
     // Connect to the database
     await connect();
 
-    // Find the blog to get the image path
+    // Find the blog and check the ownership
     const blogToDelete = await Blog.findById(id);
     if (!blogToDelete) {
       return NextResponse.json({ message: "Blog not found." }, { status: 404 });
+    }
+    // Check if current user is the author
+    if (blogToDelete.author.toString() !== session.user.id) {
+      return NextResponse.json(
+        { message: "Forbidden: You are not authorized to delete this blog." },
+        { status: 403 }
+      );
     }
 
     // Delete the image from Supabase storage
@@ -127,7 +140,7 @@ export async function DELETE(
 
     return NextResponse.json(
       {
-        message: "Blog and associated image deleted successfully.",
+        message: "Blog deleted successfully.",
         blog: deletedBlog,
       },
       { status: 200 }
