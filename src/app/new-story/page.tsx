@@ -152,13 +152,13 @@ const Story = () => {
                       onChange={(e) => setTitle(e.target.value)} //updates the title state when the user types the title
                       placeholder="Title"
                       onBlur={() => setisTitleEditing(false)} //Disables editing when the user looses focus from the input
-                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-2xl font-bold text-gray-800"
+                      className="mt-1 w-full rounded-md border-none outline-none sm:text-2xl text-base font-bold text-gray-600"
                       autoFocus
                       aria-label="Edit Title"
                     />
                   ) : (
                     <div
-                      className="cursor-text lg:text-4xl sm:text-2xl text-xl font-bold text-gray-400"
+                      className="cursor-text lg:text-4xl sm:text-2xl text-xl font-bold text-gray-800"
                       onClick={() => setisTitleEditing(true)} //starts editing mode when clicked
                     >
                       {/* shows either the current title or the placeholder */}
@@ -175,14 +175,14 @@ const Story = () => {
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Write Your Story...."
                       onBlur={() => setisDescriptionEditing(false)}
-                      className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-sm text-gray-800 resize-none"
+                      className="mt-1 block w-full rounded-md border-gray-300 border-none outline-none sm:text-xl text-base text-gray-600 resize-none"
                       autoFocus
                       aria-label="Edit Description"
                     ></textarea>
                   ) : (
                     <div
                       onClick={() => setisDescriptionEditing(true)}
-                      className="cursor-text text-gray-400 min-h-[100px] sm:text-2xl"
+                      className="cursor-text text-gray-800 min-h-[100px] sm:text-xl"
                     >
                       {description || "Tell your story..."}
                     </div>
