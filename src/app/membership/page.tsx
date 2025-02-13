@@ -14,7 +14,10 @@ import NetworkError from "@/src/components/networkError";
 
 interface Blog {
   id: string;
-  author: string;
+  author: {
+    name: string;
+    image: string;
+  };
   title: string;
   subtitle: string;
   description: string;
@@ -28,7 +31,10 @@ interface Blog {
 
 interface ApiBlog {
   _id: string;
-  author: string;
+  author: {
+    name: string;
+    image: string;
+  };
   title: string;
   subtitle: string;
   description: string;
@@ -37,6 +43,8 @@ interface ApiBlog {
   comments: number;
   image: string;
 }
+// const { data: session } = useSession();
+// const user = session?.user;
 
 const Blog = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -66,9 +74,13 @@ const Blog = () => {
       if (data.blogs && data.blogs.length > 0) {
         // Properly map API blogs to frontend Blog interface
         const formattedBlogs = data.blogs
-          .map(({ _id, ...rest }) => ({
+          .map(({ _id, author, ...rest }) => ({
             ...rest,
             id: _id,
+            author: {
+              name: author.name || "Unknown User",
+              image: author.image || "/User.png",
+            },
             isBookmarked: false,
             isLiked: false,
           }))
@@ -242,7 +254,19 @@ const Blog = () => {
                   <div className="flex items-end gap-x-2 md:gap-x-6">
                     {/* Blog Details */}
                     <div className="flex-grow pr-2 md:pr-4">
-                      <p className="mtext-sm text-gray-600">{blog.author}</p>
+                      {/* Author Info with Profile Picture */}
+                      <div className="flex items-center mb-2">
+                        <Image
+                          src={blog.author.image || "/placeholder.svg"}
+                          alt={!blog.author.name ? "User" : blog.author.name}
+                          width={22}
+                          height={22}
+                          className="rounded-full mr-2"
+                        />
+                        <p className="text-sm text-gray-600">
+                          {blog.author?.name || "Unknown User"}
+                        </p>
+                      </div>
                       <h1 className="text-xl font-extrabold text-black mt-2">
                         {blog.title}
                       </h1>
@@ -262,7 +286,7 @@ const Blog = () => {
                       </div>
                     </div>
                     {/* Right Side Container: Image & Icons */}
-                    <div className="flex flex-col md:flex-row items-end ">
+                    <div className="flex flex-col md:flex-row items-end">
                       {/* Blog Image */}
                       <div className="order-1 md:order-2">
                         <Image
@@ -270,7 +294,7 @@ const Blog = () => {
                           alt="Blog Image"
                           width={176}
                           height={112}
-                          className="w-28 sm:min-w-44 sm:h-28 min-w-36 h-20 rounded-md mb-4 md:mb-0 object-cover "
+                          className="w-28 sm:min-w-44 sm:h-28 min-w-36 h-20 rounded-md mb-4 md:mb-0 object-cover"
                         />
                       </div>
                       {/* Blog Actions (Icons) */}

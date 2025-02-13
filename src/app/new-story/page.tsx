@@ -17,9 +17,7 @@ const Story = () => {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleLogin = () => {
-    router.push("/");
-  };
+  const handleLogin = () => router.push("/");
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const togglePopup = () => setIsPopupVisible(!isPopupVisible);
@@ -29,7 +27,6 @@ const Story = () => {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [author, setAuthor] = useState("");
   const [image, setImage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -37,8 +34,6 @@ const Story = () => {
   //setisTitleEditing: The function to toggle the edit state for the title
   const [isTitleEditing, setisTitleEditing] = useState(false);
   const [isDescriptionEditing, setisDescriptionEditing] = useState(false);
-  const [isAuthorEditing, setisAuthorEditing] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,40 +46,37 @@ const Story = () => {
 
   const handlePublish = async (event: React.FormEvent) => {
     event.preventDefault();
-    const currentDate = new Date().toLocaleDateString();
     setIsSubmitting(true);
 
     try {
+      if (!user) {
+        toast.error("You must be logged in to publish a blog");
+        return;
+      }
+
       let imageUrl = "";
       if (imageFile) {
         const formdata = new FormData();
         formdata.append("image", imageFile);
-
         const res = await axios.post("/api/uploads", formdata);
-        if (res.status == 200) {
-          imageUrl = res.data.url;
-        } else {
-          throw new Error("Failed to upload image");
-        }
+        imageUrl = res.data.url;
       }
 
-      //Publish the blog to the API
       const res = await axios.post("/api/blogs", {
         title,
         description,
-        author,
-        date: currentDate,
         image: imageUrl,
+        // Author is now the user's ID from session
+        author: user.id, // Ensure your session includes the user's ID
       });
 
-      if (res.status == 200) {
+      if (res.status === 200) {
         toast.success("Blog published successfully!!");
         router.push("/membership");
-      } else {
-        toast.error("Failed to publish blog!!");
       }
     } catch (error) {
-      console.error("Error publishing blog: " + (error as Error).message);
+      console.error("Error publishing blog:", error);
+      toast.error("Failed to publish blog");
     } finally {
       setIsSubmitting(false);
     }
@@ -106,12 +98,11 @@ const Story = () => {
             </div>
           </div>
           <div className="flex gap-6 items-center text-gray-400">
+            {/* Publish button */}
             <button
               onClick={handlePublish}
               className="text-[13px] text-white bg-green-600 px-2.5 py-0.5 rounded-3xl hover:bg-green-700 transition-colors duration-200 cursor-pointer"
-              disabled={
-                !title || !description || !author || !image || isSubmitting
-              }
+              disabled={!title || !description || !image || isSubmitting}
             >
               {isSubmitting ? "Publishing..." : "Publish"}
             </button>
@@ -121,10 +112,10 @@ const Story = () => {
             </div>
 
             <Image
-              src={!user?.image ? defaultImageUrl : user.image}
-              alt="Placeholder Image"
-              width={600}
-              height={600}
+              src={user?.image || defaultImageUrl}
+              alt="User avatar"
+              width={32}
+              height={32}
               priority
               className="w-8 h-8 rounded-full border-gray-300 cursor-pointer hover:opacity-55 transition"
               onClick={togglePopup}
@@ -140,25 +131,9 @@ const Story = () => {
               <div className="flex flex-col sm:gap-6 gap-4">
                 {/* Author Input */}
                 <div>
-                  {isAuthorEditing ? (
-                    <input
-                      type="text"
-                      value={author}
-                      onChange={(e) => setAuthor(e.target.value)}
-                      placeholder="Author"
-                      onBlur={() => setisAuthorEditing(false)}
-                      className="mt-1 w-full rounded-md sm:text-sm border-none outline-none text-gray-700"
-                      autoFocus
-                      aria-label="Edit Author"
-                    />
-                  ) : (
-                    <div
-                      onClick={() => setisAuthorEditing(true)}
-                      className="cursor-text text-gray-700"
-                    >
-                      {author || "Author"}
-                    </div>
-                  )}
+                  <p className="mt-1 w-full rounded-md sm:text-sm text-gray-700">
+                    {user?.name || "Author"}
+                  </p>
                 </div>
                 {/* Title Input */}
                 <div>
@@ -206,6 +181,7 @@ const Story = () => {
                   )}
                 </div>
               </div>
+
               {/* Image Input */}
               <div className="mt-5">
                 <input

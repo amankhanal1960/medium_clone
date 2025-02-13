@@ -6,7 +6,7 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: false },
-    image: { type: String },
+    image: { type: String, default: "/User.png" }, // This stores the profile picture URL
     oauthProvider: { type: String },
     bio: { type: String },
     bookmarks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
