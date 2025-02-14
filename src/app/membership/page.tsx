@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,7 @@ import { toast } from "react-toastify";
 import NetworkError from "@/src/components/networkError";
 import ShowMoreText from "react-show-more-text";
 import Pagination from "@/src/components/Pagination";
+import { useConfirm } from "@/src/components/hooks/useConfirm";
 
 interface Blog {
   id: string;
@@ -69,6 +71,9 @@ const Blog = () => {
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };
+
+  // Importing the custom confirmation hook
+  const { confirm, ConfirmDialog } = useConfirm();
 
   // Fetch blogs on component mount
   useEffect(() => {
@@ -154,38 +159,28 @@ const Blog = () => {
     }
   };
 
-  //writing the code for the delete with promise,resolve and reject
-  const removeBlog = (id: string) => {
-    const confirmed = confirm("Are you sure you want to remove?");
+  // Updated removeBlog function using the custom confirmation hook
+  const removeBlog = async (id: string) => {
+    // Use the custom confirmation instead of native confirm()
+    const confirmed = await confirm(
+      "Are you sure you want to remove this blog post?"
+    );
     if (confirmed) {
-      //Return a new promise
-      return new Promise<string>((resolve, reject) => {
-        axios
-          .delete(`/api/blogs/${id}`)
-          .then((res) => {
-            if (res.status === 200) {
-              toast.success("Blog deleted successfully!!");
-              setBlogs((prevBlogs) =>
-                prevBlogs.filter((blog) => blog.id !== id)
-              );
-              resolve("Success in deleting the blog");
-            } else {
-              toast.error("Failed to delete the blog!!");
-              reject(new Error("Failed to delete the blog"));
-            }
-          })
-          .catch((error) => {
-            if (error.response?.status === 403) {
-              toast.error(
-                "Forbidden! You are not authorized to delete this blog."
-              );
-            } else {
-              toast.error("An error occurred. Please try again.");
-            }
-          });
-      });
-    } else {
-      return Promise.resolve("Blog deletion cancelled");
+      try {
+        const response = await axios.delete(`/api/blogs/${id}`);
+        if (response.status === 200) {
+          toast.success("Blog deleted successfully!");
+          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+        } else {
+          toast.error("Failed to delete the blog!");
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 403) {
+          toast.error("Forbidden! You are not authorized to delete this blog.");
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
+      }
     }
   };
 
@@ -382,6 +377,8 @@ const Blog = () => {
           </div>
         </div>
       </div>
+      {/* Render the custom confirmation dialog */}
+      <ConfirmDialog />
     </div>
   );
 };
