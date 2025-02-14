@@ -52,6 +52,8 @@ const Blog = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // State to track which blog's like popup is showing
+  const [popupBlogId, setPopupBlogId] = useState<string | null>(null);
 
   // Fetch blogs on component mount
   useEffect(() => {
@@ -104,18 +106,47 @@ const Blog = () => {
     }
   };
 
+  // Function to toggle like/unlike for a blog post and show the +1 popup
+  const handleLikeClick = async (blogId: string) => {
+    try {
+      const response = await axios.post(`/api/blogs/${blogId}/like`);
+      if (response.status === 200) {
+        setBlogs((prevBlogs) =>
+          prevBlogs.map((blog) =>
+            blog.id === blogId
+              ? {
+                  ...blog,
+                  likes: response.data.likes,
+                  isLiked: response.data.isLiked,
+                }
+              : blog
+          )
+        );
+        // If the action resulted in a like, show the popup
+        if (response.data.isLiked) {
+          setPopupBlogId(blogId);
+          // Remove the popup after 1 second
+          setTimeout(() => {
+            setPopupBlogId(null);
+          }, 1000);
+        }
+      }
+    } catch (error: unknown) {
+      console.error("Failed to like", error);
+      toast.error("Failed to update like. Please try again.");
+    }
+  };
+
   //writing the code for the delete with promise,resolve and reject
   const removeBlog = (id: string) => {
     const confirmed = confirm("Are you sure you want to remove?");
     if (confirmed) {
       //Return a new promise
       return new Promise<string>((resolve, reject) => {
-        //Perform the axios DELETE request
         axios
           .delete(`/api/blogs/${id}`)
           .then((res) => {
             if (res.status === 200) {
-              //Handle success. Resolve the promise
               toast.success("Blog deleted successfully!!");
               setBlogs((prevBlogs) =>
                 prevBlogs.filter((blog) => blog.id !== id)
@@ -220,7 +251,7 @@ const Blog = () => {
                       <div className="flex items-center mb-2">
                         <Image
                           src={blog.author.image || "/placeholder.svg"}
-                          alt={!blog.author.name ? "User" : blog.author.name}
+                          alt={blog.author.name || "User"}
                           width={22}
                           height={22}
                           className="rounded-full mr-2"
@@ -246,8 +277,19 @@ const Blog = () => {
                       </h4>
                       <div className="sm:text-base text-sm flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
-                        <div className="flex items-center ml-4">
-                          <i className="fa-solid fa-hands-clapping mr-1 cursor-pointer"></i>
+                        <div className="flex items-center ml-4 relative">
+                          <i
+                            onClick={() => handleLikeClick(blog.id)}
+                            className={`fa-solid fa-hands-clapping mr-1 cursor-pointer ${
+                              blog.isLiked ? "text-gray-700" : "text-gray-500"
+                            }`}
+                          ></i>
+                          {/* Render +1 popup if this blog is the one that was just liked */}
+                          {popupBlogId === blog.id && (
+                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center animate-fade-out">
+                              +1
+                            </span>
+                          )}
                           <p>{blog.likes}</p>
                         </div>
                         <div className="flex items-center ml-4">

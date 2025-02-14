@@ -19,3 +19,19 @@ body {
   background: var(--background);
   font-family: "playfair Display", serif;
 }
+
+/* Global styles for the fade-out animation */
+
+@keyframes fadeOutUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+.animate-fade-out {
+  animation: fadeOutUp 1s ease forwards;
+}
