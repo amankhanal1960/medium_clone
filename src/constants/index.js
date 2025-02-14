@@ -24,12 +24,12 @@ export const smallScreenLinks = [
 ];
 
 export const recommendations = [
-  { href: "/foryou", label: "For you" },
-  { href: "/", label: "Following" },
-  { href: "/", label: "Spanish" },
-  { href: "/", label: "Women" },
-  { href: "/", label: "Apple" },
-  { href: "/", label: "Marketing" },
-  { href: "/", label: "Programming" },
-  { href: "/", label: "Health" },
+  { href: "/membership", label: "For you" },
+  { href: "/membership", label: "Following" },
+  { href: "/membership", label: "Spanish" },
+  { href: "/membership", label: "Science" },
+  { href: "/membership", label: "Apple" },
+  { href: "/membership", label: "Marketing" },
+  { href: "/membership", label: "Programming" },
+  { href: "/membership", label: "Health" },
 ];

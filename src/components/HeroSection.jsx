@@ -2,8 +2,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import RegisterPopup from "./RegisterPopup";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
   const MODE = "start";
 
@@ -21,9 +26,14 @@ const HeroSection = () => {
           <p className="text-[22px] font-medium">
             A place to read, write and deepen your understanding.
           </p>
-
           <button
-            onClick={() => setIsRegisterPopupOpen(true)}
+            onClick={() => {
+              if (session && session.user) {
+                router.push("/membership");
+              } else {
+                setIsRegisterPopupOpen(true);
+              }
+            }}
             className="flex justify-center text-xl items-center gap-2 py-2 w-[196px] text-white rounded-full bg-green-700 lg:bg-black mt-12"
           >
             Start Reading
