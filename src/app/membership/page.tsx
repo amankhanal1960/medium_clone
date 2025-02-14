@@ -233,18 +233,16 @@ const Blog = () => {
                         {blog.title}
                       </h1>
                       <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
-                        <h4 className="md:text-base text-sm font-medium text-gray-400 mt-2">
-                          <ShowMoreText
-                            lines={3}
-                            more="See more"
-                            less="See less"
-                            anchorClass="text-gray-800 cursor-pointer text-sm"
-                            expanded={false}
-                            truncatedEndingComponent="... "
-                          >
-                            {blog.description}
-                          </ShowMoreText>
-                        </h4>
+                        <ShowMoreText
+                          lines={2}
+                          more="See more"
+                          less="See less"
+                          anchorClass="text-gray-800 cursor-pointer text-sm"
+                          expanded={false}
+                          truncatedEndingComponent="... "
+                        >
+                          {blog.description}
+                        </ShowMoreText>
                       </h4>
                       <div className="sm:text-base text-sm flex items-center mt-4 text-gray-500">
                         <p>{blog.date}</p>
