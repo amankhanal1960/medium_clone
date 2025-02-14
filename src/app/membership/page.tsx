@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,6 +11,7 @@ import BlogCardSkeleton from "./blogCardSkeleton";
 import { toast } from "react-toastify";
 import NetworkError from "@/src/components/networkError";
 import ShowMoreText from "react-show-more-text";
+import Pagination from "@/src/components/Pagination";
 
 interface Blog {
   id: string;
@@ -55,6 +55,21 @@ const Blog = () => {
   // State to track which blog's like popup is showing
   const [popupBlogId, setPopupBlogId] = useState<string | null>(null);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5; // Change this to however many blogs you want per page
+
+  // Calculate pagination indexes (0-based)
+  const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstItem = currentPage * itemsPerPage;
+  const currentBlogs = blogs.slice(indexOfFirstItem, indexOfLastItem);
+  const pageCount = Math.ceil(blogs.length / itemsPerPage);
+
+  // Handle page click
+  const handlePageClick = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
   // Fetch blogs on component mount
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -78,10 +93,12 @@ const Blog = () => {
           .map(({ _id, author, ...rest }) => ({
             ...rest,
             id: _id,
-            author: {
-              name: author.name || "Unknown User",
-              image: author.image || "/User.png",
-            },
+            author: author
+              ? {
+                  name: author.name || "Unknown User",
+                  image: author.image || "/User.png",
+                }
+              : { name: "Unknown User", image: "/User.png" },
             isBookmarked: false,
             isLiked: false,
           }))
@@ -242,7 +259,7 @@ const Blog = () => {
                 <BlogCardSkeleton />
               </>
             ) : (
-              blogs.map((blog) => (
+              currentBlogs.map((blog) => (
                 <div key={blog.id} className="mb-8">
                   <div className="flex items-end gap-x-2 md:gap-x-6">
                     {/* Blog Details */}
@@ -324,6 +341,15 @@ const Blog = () => {
                   <hr className="border-t border-gray-200 mt-6" />
                 </div>
               ))
+            )}
+
+            {/* Pagination Controls */}
+            {!loading && pageCount > 1 && (
+              <Pagination
+                pageCount={pageCount}
+                currentPage={currentPage}
+                onPageChange={handlePageClick}
+              />
             )}
           </div>
           <Link href="/new-story">

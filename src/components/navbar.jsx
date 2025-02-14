@@ -59,7 +59,11 @@ const Navbar = () => {
   const router = useRouter();
 
   const handleLogin = () => {
-    router.push("/");
+    if (session && session.user) {
+      router.push("/membership");
+    } else {
+      router.push("/");
+    }
   };
   const handleStory = () => {
     router.push("/new-story");

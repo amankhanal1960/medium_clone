@@ -71,6 +71,9 @@ importers:
       react-oauth:
         specifier: ^0.0.1
         version: 0.0.1
+      react-paginate:
+        specifier: ^8.3.0
+        version: 8.3.0(react@18.3.1)
       react-router-dom:
         specifier: ^7.0.2
         version: 7.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1821,6 +1824,11 @@ packages:
 
   react-oauth@0.0.1:
     resolution: {integrity: sha512-vbzUrZzKQLILhFuvyelvpyOh9coi7/h6ZkhOEG89SYamviWaXKM3PKBiXMbLsRxf0QBV8CMvyZhtvmo0xL5Q0g==}
+
+  react-paginate@8.3.0:
+    resolution: {integrity: sha512-TptZE37HPkT3R+7AszWA++LOTIsIHXcCSWMP9WW/abeF8sLpJzExFB/dVs7xbtqteJ5njF6kk+udTDC0AR3y5w==}
+    peerDependencies:
+      react: ^16 || ^17 || ^18 || ^19
 
   react-router-dom@7.1.5:
     resolution: {integrity: sha512-/4f9+up0Qv92D3bB8iN5P1s3oHAepSGa9h5k6tpTFlixTTskJZwKGhJ6vRJ277tLD1zuaZTt95hyGWV1Z37csQ==}
@@ -4124,6 +4132,11 @@ snapshots:
   react-is@16.13.1: {}
 
   react-oauth@0.0.1: {}
+
+  react-paginate@8.3.0(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
 
   react-router-dom@7.1.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
