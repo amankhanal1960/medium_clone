@@ -15,11 +15,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         userAgent
       );
 
-    // Show alert if in-app browser detected
+    // Redirect to default browser if in-app browser is detected
     if (isInAppBrowser) {
-      alert(
-        "It looks like you are using an in-app browser, which may not support all features of this site. For the best experience, please open this link in your full web browser (such as Chrome or Safari). You can copy the URL and paste into your preferred browser to continue."
-      );
+      // alert(
+      //   "It looks like you are using an in-app browser, which may not support all features of this site. For the best experience, please open this link in your full web browser (such as Chrome or Safari). You can copy the URL and paste into your preferred browser to continue."
+      // );
+      const currentUrl = window.location.href; // Get the current URL
+      const redirectUrl = `https://medium-clone-three-nu.vercel.app/api/redirect?url=${encodeURIComponent(
+        currentUrl
+      )}`;
+      window.location.href = redirectUrl;
     }
   }, []);
 
