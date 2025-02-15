@@ -210,7 +210,7 @@ const Blog = () => {
         <div className="bg-white w-full lg:w-[65%] h-full min-h-screen">
           <div className="xl:ml-44 xl:mr-28 lg:ml-24 lg:mr-16 sm:ml-8 sm:mr-8 ml-4 mr-4">
             {/* Recommendations Section */}
-            <div className="sticky top-0">
+            <div className="sticky top-0 z-10">
               <div className="bg-white text-gray-500 py-4 flex items-center ">
                 {/* Left Arrow (only on mobile) */}
                 <button
@@ -298,7 +298,7 @@ const Blog = () => {
                           ></i>
                           {/* Render +1 popup if this blog is the one that was just liked */}
                           {popupBlogId === blog.id && (
-                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center animate-fade-out">
+                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center  animate-fade-out">
                               +1
                             </span>
                           )}
