@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     // Show alert if in-app browser detected
     if (isInAppBrowser) {
       alert(
-        "For the best experience, we recommend opening this link in a standard web browser like Chrome, Safari, or Firefox. Please copy the URL and paste it into your preferred browser to continue."
+        "It looks like you are using an in-app browser, which may not support all features of this site. For the best experience, please open this link in your full web browser (such as Chrome or Safari). You can copy the URL and paste into your preferred browser to continue."
       );
     }
   }, []);
