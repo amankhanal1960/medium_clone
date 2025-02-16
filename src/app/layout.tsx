@@ -15,7 +15,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         userAgent
       );
 
-    // Redirect to default browser if in-app browser is detected
     if (isInAppBrowser) {
       alert(
         "It looks like you are using an in-app browser, which may not support all features of this site. For the best experience, please open this link in your full web browser (such as Chrome or Safari). You can copy the URL and paste into your preferred browser to continue."
