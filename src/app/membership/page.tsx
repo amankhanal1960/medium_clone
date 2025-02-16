@@ -317,14 +317,16 @@ const Blog = () => {
                         <div className="flex items-center ml-4 relative">
                           <i
                             onClick={() => handleLikeClick(blog.id)}
-                            className={`fa-solid fa-hands-clapping mr-1 cursor-pointer ${
-                              blog.isLiked ? "text-gray-700" : "text-gray-500"
+                            className={`fa-regular fa-heart mr-1 cursor-pointer ${
+                              blog.isLiked
+                                ? "fa-solid text-red-600"
+                                : "fa-regula text-gray-500"
                             }`}
                           ></i>
                           {/* Render +1 popup if this blog is the one that was just liked */}
                           {popupBlogId === blog.id && (
-                            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center  animate-fade-out">
-                              +1
+                            <span className="absolute -top-6 -right-6 text-white text-lg rounded-full w-10 h-10 flex items-center justify-start animate-fade-out">
+                              <i className="fa-solid fa-heart text-red-400"></i>
                             </span>
                           )}
                           <p>{blog.likes}</p>
