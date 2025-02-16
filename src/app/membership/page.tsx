@@ -14,6 +14,7 @@ import NetworkError from "@/src/components/networkError";
 import ShowMoreText from "react-show-more-text";
 import Pagination from "@/src/components/Pagination";
 import { useConfirm } from "@/src/components/hooks/useConfirm";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Blog {
   id: string;
@@ -61,13 +62,16 @@ const Blog = () => {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 5; // Change this to however many blogs you want per page
-
-  // Calculate pagination indexes (0-based)
+  const itemsPerPage = 5;
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = currentPage * itemsPerPage;
   const currentBlogs = blogs.slice(indexOfFirstItem, indexOfLastItem);
   const pageCount = Math.ceil(blogs.length / itemsPerPage);
+
+  const [fullSizeImageData, setFullSizeImageData] = useState<{
+    src: string;
+    id: string;
+  } | null>(null);
 
   // Handle page click
   const handlePageClick = (selectedItem: { selected: number }) => {
@@ -93,7 +97,6 @@ const Blog = () => {
         timeout: 15000,
       });
       const { data } = response;
-
       if (data.blogs && data.blogs.length > 0) {
         // Properly map API blogs to frontend Blog interface
         const formattedBlogs = data.blogs
@@ -209,6 +212,15 @@ const Blog = () => {
     }
   };
 
+  // Modify the image click handler to also capture the blog id
+  const handleImageClick = (src: string, id: string) => {
+    setFullSizeImageData({ src, id });
+  };
+
+  const closeFullSizeImage = () => {
+    setFullSizeImageData(null);
+  };
+
   if (error) {
     return <NetworkError errorType={error} onRetry={() => fetchBlogs()} />;
   }
@@ -320,7 +332,7 @@ const Blog = () => {
                             className={`fa-regular fa-heart mr-1 cursor-pointer ${
                               blog.isLiked
                                 ? "fa-solid text-red-600"
-                                : "fa-regula text-gray-500"
+                                : "fa-regular text-gray-500"
                             }`}
                           ></i>
                           {/* Render +1 popup if this blog is the one that was just liked */}
@@ -341,13 +353,20 @@ const Blog = () => {
                     <div className="flex flex-col md:flex-row items-end">
                       {/* Blog Image */}
                       <div className="order-1 md:order-2">
-                        <Image
-                          src={blog.image || "/placeholder.svg"}
-                          alt="Blog Image"
-                          width={176}
-                          height={112}
-                          className="w-28 sm:min-w-44 sm:h-28 min-w-36 h-20 rounded-md mb-4 md:mb-0 object-cover"
-                        />
+                        {/* Wrap the thumbnail in a motion.div with a unique layoutId */}
+                        <motion.div
+                          layoutId={`blog-image-${blog.id}`}
+                          className="cursor-pointer"
+                          onClick={() => handleImageClick(blog.image, blog.id)}
+                        >
+                          <Image
+                            src={blog.image || "/placeholder.svg"}
+                            alt="Blog Image"
+                            width={176}
+                            height={112}
+                            className="w-28 sm:min-w-44 sm:h-28 min-w-36 h-20 rounded-md mb-4 md:mb-0 object-cover"
+                          />
+                        </motion.div>
                       </div>
                       {/* Blog Actions (Icons) */}
                       <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-2 md:pr-6 sm:text-xs text-base">
@@ -363,7 +382,7 @@ const Blog = () => {
                               : "fa-regular fa-bookmark text-gray-500 hover:scale-105"
                           }`}
                         />
-                        <i className="fa-solid fa-ellipsis cursor-pointer  hover:scale-125 transition-all duration-100"></i>
+                        <i className="fa-solid fa-ellipsis cursor-pointer hover:scale-125 transition-all duration-100"></i>
                       </div>
                     </div>
                   </div>
@@ -413,6 +432,40 @@ const Blog = () => {
       </div>
       {/* Render the custom confirmation dialog */}
       <ConfirmDialog />
+      {/* Full-size image modal with shared element transition */}
+      <AnimatePresence>
+        {fullSizeImageData && (
+          <motion.div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm bg-opacity-75 flex items-center justify-center z-50  transition-opacity duration-30"
+            onClick={closeFullSizeImage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              key={`modal-${fullSizeImageData.id}`} // Add unique key here
+              layoutId={`blog-image-${fullSizeImageData.id}`}
+              className="relative max-w-full max-h-full"
+            >
+              <Image
+                src={fullSizeImageData.src || "/placeholder.svg"}
+                alt="Full size image"
+                layout="responsive"
+                width={1920}
+                height={1080}
+                objectFit="contain"
+                className="object-contain max-w-[90vw] max-h-[90vh]"
+              />
+              <button
+                className="absolute top-4 right-4 text-white text-2xl"
+                onClick={closeFullSizeImage}
+              >
+                <i className="fa-solid fa-times"></i>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
