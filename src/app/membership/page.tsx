@@ -45,6 +45,8 @@ interface ApiBlog {
   likes: number;
   comments: number;
   image: string;
+  isBookmarked: boolean;
+  isLiked: boolean;
 }
 
 const Blog = () => {
@@ -95,7 +97,7 @@ const Blog = () => {
       if (data.blogs && data.blogs.length > 0) {
         // Properly map API blogs to frontend Blog interface
         const formattedBlogs = data.blogs
-          .map(({ _id, author, ...rest }) => ({
+          .map(({ _id, author, isBookmarked, isLiked, ...rest }) => ({
             ...rest,
             id: _id,
             author: author
@@ -104,8 +106,8 @@ const Blog = () => {
                   image: author.image || "/User.png",
                 }
               : { name: "Unknown User", image: "/User.png" },
-            isBookmarked: false,
-            isLiked: false,
+            isBookmarked: isBookmarked ?? false, // Use API value, default to false if undefined
+            isLiked: isLiked ?? false,
           }))
           .reverse();
         setBlogs(formattedBlogs);
@@ -156,6 +158,29 @@ const Blog = () => {
     } catch (error: unknown) {
       console.error("Failed to like", error);
       toast.error("Failed to update like. Please try again.");
+    }
+  };
+
+  // Function to toggle bookmark for a blog post
+  const handleBookmarkClick = async (blogId: string) => {
+    try {
+      const response = await axios.post(`/api/blogs/${blogId}/bookmark`);
+      if (response.status === 200) {
+        setBlogs((prevBlogs) =>
+          prevBlogs.map((blog) =>
+            blog.id === blogId
+              ? {
+                  ...blog,
+                  isBookmarked: response.data.isBookmarked,
+                }
+              : blog
+          )
+        );
+        toast.success(response.data.message); // Correct message from API
+      }
+    } catch (error: unknown) {
+      console.error("Failed to toggle bookmark", error);
+      toast.error("Failed to update bookmark. Please try again.");
     }
   };
 
@@ -326,10 +351,17 @@ const Blog = () => {
                       <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-2 md:pr-6 sm:text-xs text-base">
                         <i
                           onClick={() => removeBlog(blog.id)}
-                          className="fa-solid fa-circle-minus cursor-pointer"
+                          className="fa-solid fa-circle-minus cursor-pointer animate-heartbeat hover:scale-105 transition-all duration-300"
                         ></i>
-                        <i className="fa-regular fa-bookmark cursor-pointer"></i>
-                        <i className="fa-solid fa-ellipsis cursor-pointer"></i>
+                        <i
+                          onClick={() => handleBookmarkClick(blog.id)}
+                          className={`cursor-pointer transition-all duration-300 ease-in-out ${
+                            blog.isBookmarked
+                              ? "fa-solid fa-bookmark text-yellow-500 animate-pop"
+                              : "fa-regular fa-bookmark text-gray-500 hover:scale-105"
+                          }`}
+                        />
+                        <i className="fa-solid fa-ellipsis cursor-pointer  hover:scale-125 transition-all duration-100"></i>
                       </div>
                     </div>
                   </div>
