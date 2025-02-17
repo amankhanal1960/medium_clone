@@ -110,7 +110,7 @@ const Blog = () => {
                   image: author.image || "/User.png",
                 }
               : { name: "Unknown User", image: "/User.png" },
-            isBookmarked: isBookmarked ?? false, // Use API value, default to false if undefined
+            isBookmarked: isBookmarked ?? false,
             isLiked: isLiked ?? false,
           }))
           .reverse();
@@ -136,8 +136,25 @@ const Blog = () => {
 
   // Function to toggle like/unlike for a blog post and show the +1 popup
   const handleLikeClick = async (blogId: string) => {
+    //1. Optimistic update the UI immediately
+    //This toggles the isLiked flag and increments/decrements the likes count
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((blog) => {
+        if (blog.id === blogId) {
+          return {
+            ...blog,
+            likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
+            isLiked: !blog.isLiked,
+          };
+        }
+        return blog;
+      })
+    );
+
     try {
       const response = await axios.post(`/api/blogs/${blogId}/like`);
+
+      //3. If the api call is sucessful, update the UI with the response
       if (response.status === 200) {
         setBlogs((prevBlogs) =>
           prevBlogs.map((blog) =>
