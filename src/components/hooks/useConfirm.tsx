@@ -60,7 +60,7 @@ export const useConfirm = () => {
               </div>
               <div className="ml-4 text-left">
                 <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                  Confirm Action
+                  Confirm Action !!
                 </h3>
                 <p className="mt-2 text-sm text-gray-600">
                   {confirmState.message}
@@ -78,7 +78,7 @@ export const useConfirm = () => {
             </button>
             <button
               type="button"
-              className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-all"
+              className="rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600 transition-all"
               onClick={handleConfirm}
             >
               Confirm

@@ -16,6 +16,7 @@ import Pagination from "@/src/components/Pagination";
 import { useConfirm } from "@/src/components/hooks/useConfirm";
 import { motion, AnimatePresence } from "framer-motion";
 import CommentSection from "@/src/components/ui/commentPopup";
+import Popup from "@/src/components/ui/membership_popup";
 
 interface Blog {
   id: string;
@@ -58,6 +59,12 @@ const Blog = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // State to control which blog's popup is open
+  const [activePopupBlogId, setActivePopupBlogId] = useState<string | null>(
+    null
+  );
+
   // State to control which blog's comment popup is open
   const [activeCommentBlogId, setActiveCommentBlogId] = useState<string | null>(
     null
@@ -91,6 +98,15 @@ const Blog = () => {
 
   // Importing the custom confirmation hook
   const { confirm, ConfirmDialog } = useConfirm();
+
+  // Toggle the popup visibility
+  const togglePopup = (blogId: string) => {
+    if (activePopupBlogId === blogId) {
+      setActivePopupBlogId(null); // Close the popup if it's already open
+    } else {
+      setActivePopupBlogId(blogId); // Open the popup for the clicked blog
+    }
+  };
 
   // Fetch blogs on component mount
   useEffect(() => {
@@ -488,6 +504,7 @@ const Blog = () => {
                           layoutId={`blog-image-${blog.id}`}
                           className="cursor-pointer"
                           onClick={() => handleImageClick(blog.image, blog.id)}
+                          whileHover={{ scale: 1.05 }}
                         >
                           <Image
                             src={blog.image || "/placeholder.svg"}
@@ -500,23 +517,42 @@ const Blog = () => {
                       </div>
                       {/* Blog Actions (Icons) */}
                       <div className="order-2 md:order-1 flex gap-5 text-gray-500 pr-2 md:pr-6 sm:text-xs text-base">
-                        <i
-                          onClick={() => removeBlog(blog.id)}
-                          className="fa-solid fa-circle-minus cursor-pointer animate-heartbeat hover:scale-105 transition-all duration-300"
-                        ></i>
-                        <i
-                          onClick={() => handleBookmarkClick(blog.id)}
-                          className={`cursor-pointer transition-all duration-300 ease-in-out ${
-                            blog.isBookmarked
-                              ? "fa-solid fa-bookmark text-yellow-500 animate-pop"
-                              : "fa-regular fa-bookmark text-gray-500 hover:scale-105"
-                          }`}
-                        />
-                        <i className="fa-solid fa-ellipsis cursor-pointer hover:scale-125 transition-all duration-100"></i>
+                        <motion.div whileHover={{ scale: 1.05 }}>
+                          <i
+                            onClick={() => removeBlog(blog.id)}
+                            className="fa-solid fa-circle-minus cursor-pointer hover:scale-105 transition-all duration-300"
+                          ></i>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }}>
+                          <i
+                            onClick={() => handleBookmarkClick(blog.id)}
+                            className={`cursor-pointer transition-all duration-300 ease-in-out ${
+                              blog.isBookmarked
+                                ? "fa-solid fa-bookmark text-yellow-500 animate-pop"
+                                : "fa-regular fa-bookmark text-gray-500"
+                            }`}
+                          />
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }}>
+                          <i
+                            className="fa-solid fa-ellipsis cursor-pointer transition-all duration-100"
+                            onClick={() => togglePopup(blog.id)}
+                          ></i>
+                        </motion.div>
                       </div>
                     </div>
                   </div>
                   <hr className="border-t border-gray-200 mt-6" />
+
+                  <AnimatePresence>
+                    {activePopupBlogId === blog.id && ( // Show only for the active blog
+                      <Popup
+                        blog={blog}
+                        onRemove={removeBlog}
+                        onBookmark={handleBookmarkClick}
+                      />
+                    )}
+                  </AnimatePresence>
                 </div>
               ))
             )}
