@@ -62,6 +62,7 @@ const Blog = () => {
   const [activeCommentBlogId, setActiveCommentBlogId] = useState<string | null>(
     null
   );
+
   // State to track which blog's like popup is showing
   const [popupBlogId, setPopupBlogId] = useState<string | null>(null);
   const [pendingLikes, setPendingLikes] = useState<Record<string, boolean>>({});
@@ -448,33 +449,35 @@ const Blog = () => {
                         </div>
                       </div>
                       {/* CommentSection */}
-                      {activeCommentBlogId === blog.id && (
-                        <CommentSection
-                          blogId={blog.id}
-                          onClose={closeCommentPopup}
-                          onCommentAdded={() => {
-                            setBlogs((prevBlogs) =>
-                              prevBlogs.map((b) =>
-                                b.id === blog.id
-                                  ? { ...b, comments: b.comments + 1 }
-                                  : b
-                              )
-                            );
-                          }}
-                          onCommentDeleted={() => {
-                            setBlogs((prevBlogs) =>
-                              prevBlogs.map((b) =>
-                                b.id === blog.id
-                                  ? {
-                                      ...b,
-                                      comments: Math.max(0, b.comments - 1),
-                                    }
-                                  : b
-                              )
-                            );
-                          }}
-                        />
-                      )}
+                      <AnimatePresence>
+                        {activeCommentBlogId === blog.id && (
+                          <CommentSection
+                            blogId={blog.id}
+                            onClose={closeCommentPopup}
+                            onCommentAdded={() => {
+                              setBlogs((prevBlogs) =>
+                                prevBlogs.map((b) =>
+                                  b.id === blog.id
+                                    ? { ...b, comments: b.comments + 1 }
+                                    : b
+                                )
+                              );
+                            }}
+                            onCommentDeleted={() => {
+                              setBlogs((prevBlogs) =>
+                                prevBlogs.map((b) =>
+                                  b.id === blog.id
+                                    ? {
+                                        ...b,
+                                        comments: Math.max(0, b.comments - 1),
+                                      }
+                                    : b
+                                )
+                              );
+                            }}
+                          />
+                        )}
+                      </AnimatePresence>
                     </div>
                     {/* Right Side Container: Image & Icons */}
                     <div className="flex flex-col md:flex-row items-end">
