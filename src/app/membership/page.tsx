@@ -157,15 +157,17 @@ const Blog = () => {
       //3. If the api call is sucessful, update the UI with the response
       if (response.status === 200) {
         setBlogs((prevBlogs) =>
-          prevBlogs.map((blog) =>
-            blog.id === blogId
-              ? {
-                  ...blog,
-                  likes: response.data.likes,
-                  isLiked: response.data.isLiked,
-                }
-              : blog
-          )
+          prevBlogs.map((blog) => {
+            if (blog.id === blogId) {
+              // We replace the likes count and isLiked flag with the server's data.
+              return {
+                ...blog,
+                likes: response.data.likes,
+                isLiked: response.data.isLiked,
+              };
+            }
+            return blog;
+          })
         );
         // If the action resulted in a like, show the popup
         if (response.data.isLiked) {
@@ -177,7 +179,20 @@ const Blog = () => {
         }
       }
     } catch (error: unknown) {
-      console.error("Failed to like", error);
+      //4. If the api call fails, revert the UI back to the original state
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((blog) => {
+          if (blog.id === blogId) {
+            return {
+              ...blog,
+              likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
+              isLiked: !blog.isLiked,
+            };
+          }
+          return blog;
+        })
+      );
+      console.error("Failed to toggle like", error);
       toast.error("Failed to update like. Please try again.");
     }
   };
