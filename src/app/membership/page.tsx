@@ -59,6 +59,10 @@ const Blog = () => {
   const [error, setError] = useState<string | null>(null);
   // State to track which blog's like popup is showing
   const [popupBlogId, setPopupBlogId] = useState<string | null>(null);
+  const [pendingLikes, setPendingLikes] = useState<Record<string, boolean>>({});
+  const [pendingBookmark, setpendingBookmark] = useState<
+    Record<string, boolean>
+  >({});
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(0);
@@ -135,88 +139,131 @@ const Blog = () => {
   };
 
   // Function to toggle like/unlike for a blog post and show the +1 popup
+  // Add a state to track pending likes per blog
+
   const handleLikeClick = async (blogId: string) => {
-    //1. Optimistic update the UI immediately
-    //This toggles the isLiked flag and increments/decrements the likes count
+    // If a like is already pending for this blog, do nothing.
+    if (pendingLikes[blogId]) return;
+
+    // Mark as pending
+    setPendingLikes((prev) => ({ ...prev, [blogId]: true }));
+
+    // Optimistically update UI:
     setBlogs((prevBlogs) =>
-      prevBlogs.map((blog) => {
-        if (blog.id === blogId) {
-          return {
-            ...blog,
-            likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
-            isLiked: !blog.isLiked,
-          };
-        }
-        return blog;
-      })
-    );
-
-    try {
-      const response = await axios.post(`/api/blogs/${blogId}/like`);
-
-      //3. If the api call is sucessful, update the UI with the response
-      if (response.status === 200) {
-        setBlogs((prevBlogs) =>
-          prevBlogs.map((blog) => {
-            if (blog.id === blogId) {
-              // We replace the likes count and isLiked flag with the server's data.
-              return {
-                ...blog,
-                likes: response.data.likes,
-                isLiked: response.data.isLiked,
-              };
-            }
-            return blog;
-          })
-        );
-        // If the action resulted in a like, show the popup
-        if (response.data.isLiked) {
-          setPopupBlogId(blogId);
-          // Remove the popup after 1 second
-          setTimeout(() => {
-            setPopupBlogId(null);
-          }, 1000);
-        }
-      }
-    } catch (error: unknown) {
-      //4. If the api call fails, revert the UI back to the original state
-      setBlogs((prevBlogs) =>
-        prevBlogs.map((blog) => {
-          if (blog.id === blogId) {
-            return {
+      prevBlogs.map((blog) =>
+        blog.id === blogId
+          ? {
               ...blog,
               likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
               isLiked: !blog.isLiked,
-            };
-          }
-          return blog;
-        })
-      );
-      console.error("Failed to toggle like", error);
-      toast.error("Failed to update like. Please try again.");
-    }
-  };
+            }
+          : blog
+      )
+    );
 
-  // Function to toggle bookmark for a blog post
-  const handleBookmarkClick = async (blogId: string) => {
+    // Show popup immediately if liked:
+    if (!pendingLikes[blogId]) {
+      setPopupBlogId(blogId);
+      setTimeout(() => setPopupBlogId(null), 1000);
+    }
+
     try {
-      const response = await axios.post(`/api/blogs/${blogId}/bookmark`);
+      const response = await axios.post(`/api/blogs/${blogId}/like`);
       if (response.status === 200) {
+        // Reconcile with server data
         setBlogs((prevBlogs) =>
           prevBlogs.map((blog) =>
             blog.id === blogId
               ? {
                   ...blog,
+                  likes: response.data.likes,
+                  isLiked: response.data.isLiked,
+                }
+              : blog
+          )
+        );
+      }
+    } catch (error: unknown) {
+      console.error("Failed to update like", error);
+      // Rollback optimistic update
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((blog) =>
+          blog.id === blogId
+            ? {
+                ...blog,
+                likes: blog.isLiked ? blog.likes - 1 : blog.likes + 1,
+                isLiked: !blog.isLiked,
+              }
+            : blog
+        )
+      );
+      setPopupBlogId(null);
+      toast.error("Failed to update like. Please try again.");
+    } finally {
+      // Clear pending state for this blog
+      setPendingLikes((prev) => ({ ...prev, [blogId]: false }));
+    }
+  };
+
+  // Function to toggle bookmark for a blog post
+  const handleBookmarkClick = async (blogId: string) => {
+    // Prevent processing if a bookmark update is already pending for this blog.
+    if (pendingBookmark[blogId]) return;
+
+    // Mark this blog's bookmark action as pending.
+    setpendingBookmark((prev) => ({ ...prev, [blogId]: true }));
+
+    // Optimistically update the UI:
+    // Toggle the isBookmarked flag and update the bookmarks count accordingly.
+    setBlogs((prevBlogs) =>
+      prevBlogs.map((blog) =>
+        blog.id === blogId
+          ? {
+              ...blog,
+              isBookmarked: !blog.isBookmarked,
+            }
+          : blog
+      )
+    );
+
+    setTimeout(() => setPopupBlogId(null), 1000);
+
+    try {
+      // Make the API call to update the bookmark on the server.
+      const response = await axios.post(`/api/blogs/${blogId}/bookmark`);
+      if (response.status === 200) {
+        // On success, reconcile our state with the server response.
+        setBlogs((prevBlogs) =>
+          prevBlogs.map((blog) =>
+            blog.id === blogId
+              ? {
+                  ...blog,
+                  // Update with the confirmed bookmark status from the API.
                   isBookmarked: response.data.isBookmarked,
                 }
               : blog
           )
         );
-        toast.success(response.data.message); // Correct message from API
+        toast.success(response.data.message);
       }
     } catch (error: unknown) {
       console.error("Failed to toggle bookmark", error);
       toast.error("Failed to update bookmark. Please try again.");
+      // Roll back the optimistic update:
+      // Toggle back the isBookmarked flag and adjust the bookmarks count accordingly.
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((blog) =>
+          blog.id === blogId
+            ? {
+                ...blog,
+                bookmarks: blog.isBookmarked,
+              }
+            : blog
+        )
+      );
+    } finally {
+      // Clear the pending bookmark flag so further clicks are allowed.
+      setpendingBookmark((prev) => ({ ...prev, [blogId]: false }));
     }
   };
 
