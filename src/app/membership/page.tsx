@@ -15,6 +15,7 @@ import ShowMoreText from "react-show-more-text";
 import Pagination from "@/src/components/Pagination";
 import { useConfirm } from "@/src/components/hooks/useConfirm";
 import { motion, AnimatePresence } from "framer-motion";
+import CommentSection from "@/src/components/ui/commentPopup";
 
 interface Blog {
   id: string;
@@ -57,6 +58,10 @@ const Blog = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // State to control which blog's comment popup is open
+  const [activeCommentBlogId, setActiveCommentBlogId] = useState<string | null>(
+    null
+  );
   // State to track which blog's like popup is showing
   const [popupBlogId, setPopupBlogId] = useState<string | null>(null);
   const [pendingLikes, setPendingLikes] = useState<Record<string, boolean>>({});
@@ -267,6 +272,15 @@ const Blog = () => {
     }
   };
 
+  const openCommentPopup = (blogId: string) => {
+    setActiveCommentBlogId(blogId);
+  };
+
+  // Close the comment popup
+  const closeCommentPopup = () => {
+    setActiveCommentBlogId(null);
+  };
+
   // Updated removeBlog function using the custom confirmation hook
   const removeBlog = async (id: string) => {
     // Use the custom confirmation instead of native confirm()
@@ -426,10 +440,41 @@ const Blog = () => {
                           <p>{blog.likes}</p>
                         </div>
                         <div className="flex items-center ml-4">
-                          <i className="fa-solid fa-comment mr-1 cursor-pointer"></i>
+                          <i
+                            className="fa-solid fa-comment mr-1 cursor-pointer"
+                            onClick={() => openCommentPopup(blog.id)}
+                          ></i>
                           <p>{blog.comments}</p>
                         </div>
                       </div>
+                      {/* CommentSection */}
+                      {activeCommentBlogId === blog.id && (
+                        <CommentSection
+                          blogId={blog.id}
+                          onClose={closeCommentPopup}
+                          onCommentAdded={() => {
+                            setBlogs((prevBlogs) =>
+                              prevBlogs.map((b) =>
+                                b.id === blog.id
+                                  ? { ...b, comments: b.comments + 1 }
+                                  : b
+                              )
+                            );
+                          }}
+                          onCommentDeleted={() => {
+                            setBlogs((prevBlogs) =>
+                              prevBlogs.map((b) =>
+                                b.id === blog.id
+                                  ? {
+                                      ...b,
+                                      comments: Math.max(0, b.comments - 1),
+                                    }
+                                  : b
+                              )
+                            );
+                          }}
+                        />
+                      )}
                     </div>
                     {/* Right Side Container: Image & Icons */}
                     <div className="flex flex-col md:flex-row items-end">
