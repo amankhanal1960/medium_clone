@@ -12,7 +12,7 @@ const Popup = ({
 }) => {
   return (
     <motion.div
-      className="absolute z-10 bg-white shadow-lg border border-gray-200 rounded-md p-3 w-44 right-0 md:w-48"
+      className="absolute z-10 bg-white shadow-lg border border-gray-200 rounded-md p-3 w-44 sm:right-6 right-0 md:w-48"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}

@@ -89,7 +89,7 @@ const Blog = () => {
     src: string;
     id: string;
   } | null>(null);
-  const [showCloseButton, setShowCloseButton] = useState(false);
+  // const [showCloseButton, setShowCloseButton] = useState(false);
 
   // Handle page click
   const handlePageClick = (selectedItem: { selected: number }) => {
@@ -325,13 +325,13 @@ const Blog = () => {
 
   // Modify the image click handler to also capture the blog id
   const handleImageClick = (src: string, id: string) => {
-    setShowCloseButton(false);
+    // setShowCloseButton(false);
     setFullSizeImageData({ src, id });
   };
 
   const closeFullSizeImage = () => {
     setFullSizeImageData(null);
-    setShowCloseButton(false);
+    // setShowCloseButton(false);
   };
 
   if (error) {
@@ -405,8 +405,8 @@ const Blog = () => {
               </>
             ) : (
               currentBlogs.map((blog) => (
-                <div key={blog.id} className="mb-8">
-                  <div className="flex items-end gap-x-2 md:gap-x-6">
+                <div key={blog.id} className="mb-8 relative">
+                  <div className="flex items-end gap-x-2 md:gap-x-6 ">
                     {/* Blog Details */}
                     <div className="flex-grow pr-2 md:pr-4">
                       {/* Author Info with Profile Picture */}
@@ -612,7 +612,7 @@ const Blog = () => {
               key={`modal-${fullSizeImageData.id}`} // Add unique key here
               layoutId={`blog-image-${fullSizeImageData.id}`}
               className="relative max-w-full max-h-full"
-              onLayoutAnimationComplete={() => setShowCloseButton(true)}
+              // onLayoutAnimationComplete={() => setShowCloseButton(true)}
             >
               <Image
                 src={fullSizeImageData.src || "/placeholder.svg"}
@@ -623,7 +623,7 @@ const Blog = () => {
                 objectFit="contain"
                 className="object-contain max-w-[90vw] max-h-[90vh]"
               />
-              {showCloseButton && (
+              {/* {showCloseButton && (
                 <motion.button
                   className="absolute top-4 right-4 text-white text-2xl"
                   onClick={(e) => {
@@ -636,7 +636,7 @@ const Blog = () => {
                 >
                   <i className="fa-solid fa-times"></i>
                 </motion.button>
-              )}
+              )} */}
             </motion.div>
           </motion.div>
         )}
